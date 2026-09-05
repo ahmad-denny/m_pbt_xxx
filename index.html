@@ -35,22 +35,6 @@
         .rank-btn:not(.active):hover { background-color: #e2e8f0; }
         .footer { text-align: center; padding: 15px 5px; font-size: 0.75rem; color: #64748b; margin-top: 10px; }        
 
-        /* Style untuk Login Modal */
-        #loginOverlay {
-            background-color: #1e293b;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .login-card {
-            animation: slideUp 0.4s ease-out;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        body.logged-in #loginOverlay {
-            display: none !important;
-        }
         body.logged-in #dashboardContent {
             display: block !important;
         }
@@ -58,36 +42,74 @@
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
 
-    <div id="loginOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center w-full h-screen bg-slate-900 p-4">
-        <div class="login-card bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md relative">
-            <div class="flex justify-center mb-4">
-                <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-lock text-purple-600 text-2xl"></i>
-                </div>
-            </div>
-            <h2 class="text-2xl font-bold text-center text-slate-800 mb-1">Dashboard Login</h2>
-            <p class="text-sm text-center text-gray-500 mb-6">Please enter your password</p>
+    <!-- ============================================ -->
+    <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
+    <!-- (menggantikan login password lama) -->
+    <!-- ============================================ -->
+    <script>
+    (function () {
+        // GANTI sesuai kebutuhan:
+        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index2.html';
+        var SESSION_KEY = 'mpbt_auth_nik';
+        // Pastikan user_list.json juga ada di deployment file ini
+        // (copy file yang sama dari project index2.html), karena fetch
+        // lintas-domain akan diblokir CORS kalau filenya cuma ada di sana.
+        var USER_LIST_URL = 'user_list.json';
 
-            <div class="relative mb-4">
-                <input type="password" id="loginPassword" 
-                    class="w-full px-4 py-3 bg-gray-50 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-slate-700 placeholder-gray-400 transition-all text-sm sm:text-base"
-                    placeholder="Enter password..." onkeypress="handleEnter(event)" autofocus>
-                
-                <button onclick="togglePassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
-                    <i class="fa-solid fa-eye" id="eyeIcon"></i>
-                </button>
-            </div>
+        function goToLogin() {
+            window.location.replace(LOGIN_PAGE_URL);
+        }
 
-            <div id="loginError" class="hidden text-red-500 text-xs text-center mb-3 font-medium">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Incorrect password. Please try again.
-            </div>
+        function validateSession() {
+            var params = new URLSearchParams(window.location.search);
+            var nikFromUrl = params.get('auth_nik');
+            var nik = nikFromUrl || localStorage.getItem(SESSION_KEY);
 
-            <button onclick="checkLogin()" 
-                class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
-                <span>&#10140;</span> Login
-            </button>
-        </div>
-    </div>
+            if (!nik) {
+                goToLogin();
+                return;
+            }
+
+            fetch(USER_LIST_URL, { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('Gagal memuat user_list.json');
+                    return res.json();
+                })
+                .then(function (data) {
+                    var userList = Array.isArray(data.user_list) ? data.user_list : [];
+                    var user = userList.find(function (u) {
+                        return String(u.nik).trim() === String(nik).trim();
+                    });
+
+                    if (!user) {
+                        localStorage.removeItem(SESSION_KEY);
+                        goToLogin();
+                        return;
+                    }
+
+                    localStorage.setItem(SESSION_KEY, String(user.nik));
+
+                    if (nikFromUrl) {
+                        params.delete('auth_nik');
+                        params.delete('auth_ts');
+                        var qs = params.toString();
+                        var newUrl = window.location.pathname + (qs ? '?' + qs : '');
+                        window.history.replaceState({}, document.title, newUrl);
+                    }
+
+                    document.dispatchEvent(new CustomEvent('authReady', { detail: user }));
+                })
+                .catch(function (err) {
+                    console.error('Auth check failed:', err);
+                    goToLogin();
+                });
+        }
+
+        validateSession();
+    })();
+    </script>
+    <!-- ============================================ -->
+
     <div id="dashboardContent" class="hidden">
         <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
             <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
@@ -97,6 +119,13 @@
                         <div>
                             <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight" id="headerTitle">CONTRIBUTION MARGIN [JUNI 2026]</h1>
                             <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Contribution Margin | PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP</p>
+                        </div>
+                    </div>
+                    <div id="userInfoChip" class="hidden sm:flex items-center gap-2 pl-3 ml-1 border-l border-slate-700">
+                        <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">U</div>
+                        <div class="leading-tight text-left">
+                            <p id="userNameChip" class="text-xs font-semibold whitespace-nowrap">-</p>
+                            <p id="userPosChip" class="text-[10px] text-slate-400 whitespace-nowrap">-</p>
                         </div>
                     </div>
                 </div>            
@@ -353,7 +382,6 @@
     </div>
 
     <script>
-        const CORRECT_PASSWORD = "rbpm";
         let rawData = [];
         let charts = {};
         let currentMode = 'ALL'; 
@@ -438,53 +466,27 @@
             }
         }
 
-        window.addEventListener('load', function() {
-            if (sessionStorage.getItem('isLoggedIn') === 'true') {
-                document.body.classList.add('logged-in');
-                document.getElementById('dashboardContent').classList.remove('hidden');
-                document.body.classList.remove('overflow-hidden');
-                renderTabs();
-                loadData();
-            } else {
-                document.getElementById('loginOverlay').classList.remove('hidden');
+        // Data dashboard baru dimuat & user info diisi setelah auth gate (index2.html) memvalidasi sesi
+        document.addEventListener('authReady', function (e) {
+            var user = e.detail;
+            if (user) {
+                var nameEl = document.getElementById('userNameChip');
+                var posEl = document.getElementById('userPosChip');
+                var avatarEl = document.getElementById('userAvatarCircle');
+                var displayName = user.nama || 'User';
+                var displayPos = user.posisi || '-';
+
+                if (nameEl) nameEl.textContent = displayName;
+                if (posEl) posEl.textContent = displayPos;
+                if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
             }
+
+            document.body.classList.add('logged-in');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+            document.body.classList.remove('overflow-hidden');
+            renderTabs();
+            loadData();
         });
-
-        function checkLogin() {
-            const input = document.getElementById('loginPassword');
-            const errorMsg = document.getElementById('loginError');
-            const overlay = document.getElementById('loginOverlay');
-            const dashboard = document.getElementById('dashboardContent');
-            const body = document.getElementById('mainBody');
-
-            if (input.value === CORRECT_PASSWORD) {
-                sessionStorage.setItem('isLoggedIn', 'true');
-                overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                    dashboard.classList.remove('hidden');
-                    body.classList.remove('overflow-hidden');
-                    renderTabs();
-                    loadData();
-                }, 300);
-            } else {
-                errorMsg.classList.remove('hidden');
-                input.classList.add('border-red-500', 'focus:ring-red-500');
-                input.classList.remove('border-purple-200', 'focus:ring-purple-500');
-                const card = document.querySelector('.login-card');
-                card.style.animation = 'none';
-                card.offsetHeight; 
-                card.style.animation = 'shake 0.5s';
-            }
-        }
-        function logout() { sessionStorage.removeItem('isLoggedIn'); location.reload(); }
-        function togglePassword() {
-            const input = document.getElementById('loginPassword');
-            const icon = document.getElementById('eyeIcon');
-            if (input.type === 'password') { input.type = 'text'; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
-            else { input.type = 'password'; icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye'); }
-        }
-        function handleEnter(e) { if (e.key === 'Enter') checkLogin(); }
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }`;
         document.head.appendChild(styleSheet);
