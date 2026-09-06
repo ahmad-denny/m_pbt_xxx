@@ -15,8 +15,7 @@
         .card:hover { transform: translateY(-5px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
         
         .chart-wrapper { position: relative; width: 100%; height: 280px; transition: height 0.3s ease; }
-        .chart-wrapper.compact { height: 220px; /* Naikkan dari 195px agar lebih proporsional di grid 4 kolom */
-                               }
+        .chart-wrapper.compact { height: 220px; }
         
         @media (max-width: 640px) {
             .chart-wrapper { height: 230px; }
@@ -38,37 +37,116 @@
         body.logged-in #dashboardContent {
             display: block !important;
         }
+
+        /* --- MOBILE SIDEBAR STYLES --- */
+        #mobileSidebar {
+            position: fixed;
+            top: 0;
+            left: -100%; /* Hidden by default */
+            width: 280px;
+            height: 100vh;
+            background-color: #0f172a; /* Slate 900 */
+            z-index: 60;
+            transition: left 0.3s ease-in-out;
+            padding-top: 60px;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        #mobileSidebar.open {
+            left: 0;
+        }
+
+        #sidebarOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 55;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        #sidebarOverlay.open {
+            display: block;
+        }
+
+        /* Hide desktop elements on mobile to move them to sidebar */
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-sidebar-content { display: block !important; }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-sidebar-content { display: none !important; }
+        }
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
 
+    <!-- Overlay for Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Mobile Sidebar Container -->
+    <div id="mobileSidebar">
+        <div class="p-4 border-b border-slate-700 flex justify-between items-center">
+            <h2 class="text-white font-bold text-lg">Menu</h2>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Content moved from Header to Sidebar for Mobile -->
+        <div class="p-4 space-y-6">
+            <!-- User Info Section -->
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <p class="text-xs text-slate-400 uppercase mb-2">Logged in as</p>
+                <div class="flex items-center gap-3">
+                    <div id="userAvatarSidebar" class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white shrink-0">U</div>
+                    <div class="leading-tight">
+                        <p id="userNameSidebar" class="text-sm font-semibold text-white">-</p>
+                        <p id="userPosSidebar" class="text-xs text-slate-400">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Month PBT Tabs Section -->
+            <div>
+                <p class="text-xs text-slate-400 uppercase mb-2 font-bold">Select Period</p>
+                <div id="tabContainerMobile" class="flex flex-col gap-2">
+                    <!-- Tabs will be injected here by JS -->
+                </div>
+            </div>
+            
+            <!-- Additional Mobile Filters if needed later -->
+             <div class="pt-4 border-t border-slate-700">
+                <p class="text-xs text-slate-400 uppercase mb-2">Quick Actions</p>
+                <button onclick="window.location.reload()" class="w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-800 text-sm">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ============================================ -->
     <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
-    <!-- (menggantikan login password lama) -->
     <!-- ============================================ -->
     <script>
     (function () {
-        // GANTI sesuai kebutuhan:
         var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
         var SESSION_KEY = 'mpbt_auth_nik';
-        // Pastikan user_list.json juga ada di deployment file ini
-        // (copy file yang sama dari project index2.html), karena fetch
-        // lintas-domain akan diblokir CORS kalau filenya cuma ada di sana.
         var USER_LIST_URL = 'user_list.json';
 
-        function goToLogin() {
-            window.location.replace(LOGIN_PAGE_URL);
-        }
+        function goToLogin() { window.location.replace(LOGIN_PAGE_URL); }
 
         function validateSession() {
             var params = new URLSearchParams(window.location.search);
             var nikFromUrl = params.get('auth_nik');
             var nik = nikFromUrl || localStorage.getItem(SESSION_KEY);
 
-            if (!nik) {
-                goToLogin();
-                return;
-            }
+            if (!nik) { goToLogin(); return; }
 
             fetch(USER_LIST_URL, { cache: 'no-store' })
                 .then(function (res) {
@@ -81,11 +159,7 @@
                         return String(u.nik).trim() === String(nik).trim();
                     });
 
-                    if (!user) {
-                        localStorage.removeItem(SESSION_KEY);
-                        goToLogin();
-                        return;
-                    }
+                    if (!user) { localStorage.removeItem(SESSION_KEY); goToLogin(); return; }
 
                     localStorage.setItem(SESSION_KEY, String(user.nik));
 
@@ -99,10 +173,7 @@
 
                     document.dispatchEvent(new CustomEvent('authReady', { detail: user }));
                 })
-                .catch(function (err) {
-                    console.error('Auth check failed:', err);
-                    goToLogin();
-                });
+                .catch(function (err) { console.error('Auth check failed:', err); goToLogin(); });
         }
 
         validateSession();
@@ -113,15 +184,24 @@
     <div id="dashboardContent" class="hidden">
         <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
             <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-                <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                
+                <!-- Header Top Row: Logo, Title, and Mobile Menu Button -->
+                <div class="flex items-center justify-between w-full md:w-auto">
                     <div class="flex items-center space-x-3">
+                        <!-- Hamburger Menu Button (Mobile Only) -->
+                        <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-1 mr-2">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
+
                         <div class="bg-white-600 p-1 rounded-lg shrink-0"><img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="32" height="32"></div>
                         <div>
                             <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight" id="headerTitle">CONTRIBUTION MARGIN [JUNI 2026]</h1>
                             <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Contribution Margin | PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP</p>
                         </div>
                     </div>
-                    <div id="userInfoChip" class="hidden sm:flex items-center gap-2 pl-3 ml-1 border-l border-slate-700">
+
+                    <!-- Desktop User Info Chip (Hidden on Mobile) -->
+                    <div id="userInfoChip" class="hidden md:flex items-center gap-2 pl-3 ml-1 border-l border-slate-700">
                         <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">U</div>
                         <div class="leading-tight text-left">
                             <p id="userNameChip" class="text-xs font-semibold whitespace-nowrap">-</p>
@@ -130,14 +210,16 @@
                     </div>
                 </div>            
                 
+                <!-- Controls Row: Tabs and Filter -->
                 <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-between">
-                    <div id="tabContainer" class="flex bg-slate-800 rounded-lg p-1 border border-slate-700 overflow-x-auto max-w-full">
-                        </div>
+                    
+                    <!-- Desktop Tabs (Hidden on Mobile, moved to Sidebar) -->
+                    <div id="tabContainer" class="hidden md:flex bg-slate-800 rounded-lg p-1 border border-slate-700 overflow-x-auto max-w-full">
+                        <!-- Tabs injected by JS -->
+                    </div>
 
-                    <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 flex-1 sm:flex-none">
-                        <!--
-                        <label class="text-xs font-semibold text-slate-400 px-2 uppercase hidden lg:block">SELECT BRANCH:</label>
-                        -->
+                    <!-- Branch Filter (Stays below title/controls as requested) -->
+                    <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 flex-1 sm:flex-none w-full md:w-auto">
                         <select id="branchFilter" class="bg-slate-900 text-white text-xs sm:text-sm rounded-md border-none focus:ring-2 focus:ring-blue-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px]">
                             <option value="ALL">📊 REGION SUMATERA</option>
                         </select>
@@ -147,7 +229,7 @@
         </nav>
 
         <div class="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
-            <!-- Ubah xl:grid-cols-6 menjadi lg:grid-cols-6 agar di desktop langsung muat 6 -->
+            <!-- Cards Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">            
                 <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-blue-500 relative overflow-hidden">
                     <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPBT"></div>
@@ -242,7 +324,6 @@
                     </div>
                 </div>
 
-                <!-- GANTI HANYA BARIS PEMBUKA DIV INI -->
                 <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
                     <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFBI"></div>
                     <div class="flex justify-between items-start pr-6 sm:pr-8">
@@ -281,7 +362,7 @@
                 </div>
             </div>
 
-            <!-- UBAH GRID MENJADI 3 KOLOM (lg:grid-cols-3) AGAR LEBIH RATA -->
+            <!-- Charts Grid -->
             <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 transition-all duration-300">
                 
                 <!-- CHART 1: PBT -->
@@ -336,7 +417,7 @@
                     <div class="chart-wrapper flex-grow" id="wrap-fdr"><canvas id="fdrChart"></canvas></div>
                 </div>
 
-                <!-- CHART 5: FBI (Dihapus lg:col-span-2 agar ukurannya sama dengan chart lain) -->
+                <!-- CHART 5: FBI -->
                 <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
                     <div class="flex justify-between items-center mb-2 gap-1">
                         <h3 class="text-xs sm:text-sm font-bold text-slate-700">Fee Based Income</h3>
@@ -389,13 +470,20 @@
         let currentMode = 'ALL'; 
         let chartRanks = { pbt: 'ALL', asset: 'ALL', casa: 'ALL', fdr: 'ALL', fbi: 'ALL' };
         
-        // KONFIGURASI DATA JSON DI SINI
         const jsonFiles = [            
             { id: 'juni', label: 'Juni', file: 'juni26.json'},
             { id: 'juli', label: 'Juli', file: 'juli26.json' }
         ];
 
         let currentPeriodId = 'juli'; 
+
+        // --- SIDEBAR TOGGLE FUNCTION ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
 
         function parseVal(val) {
             if (typeof val === 'number') return val;
@@ -468,19 +556,27 @@
             }
         }
 
-        // Data dashboard baru dimuat & user info diisi setelah auth gate (index2.html) memvalidasi sesi
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
-                var nameEl = document.getElementById('userNameChip');
-                var posEl = document.getElementById('userPosChip');
-                var avatarEl = document.getElementById('userAvatarCircle');
                 var displayName = user.nama || 'User';
                 var displayPos = user.posisi || '-';
 
+                // Update Desktop Header Chips
+                var nameEl = document.getElementById('userNameChip');
+                var posEl = document.getElementById('userPosChip');
+                var avatarEl = document.getElementById('userAvatarCircle');
                 if (nameEl) nameEl.textContent = displayName;
                 if (posEl) posEl.textContent = displayPos;
                 if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+
+                // Update Sidebar User Info
+                var nameSide = document.getElementById('userNameSidebar');
+                var posSide = document.getElementById('userPosSidebar');
+                var avatarSide = document.getElementById('userAvatarSidebar');
+                if (nameSide) nameSide.textContent = displayName;
+                if (posSide) posSide.textContent = displayPos;
+                if (avatarSide) avatarSide.textContent = displayName.charAt(0).toUpperCase();
             }
 
             document.body.classList.add('logged-in');
@@ -489,26 +585,43 @@
             renderTabs();
             loadData();
         });
+
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }`;
         document.head.appendChild(styleSheet);
 
         function renderTabs() {
+            // Render Desktop Tabs
             const container = document.getElementById('tabContainer');
             container.innerHTML = ''; 
+            
+            // Render Mobile Sidebar Tabs
+            const containerMobile = document.getElementById('tabContainerMobile');
+            containerMobile.innerHTML = '';
 
             jsonFiles.forEach(item => {
-                const btn = document.createElement('button');
                 const isActive = item.id === currentPeriodId;
                 
-                btn.className = isActive 
+                // Desktop Button
+                const btnDesk = document.createElement('button');
+                btnDesk.className = isActive 
                     ? "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all bg-blue-600 text-white shadow-sm whitespace-nowrap"
                     : "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap";
-                
-                btn.innerText = item.label.toUpperCase() + " 2026";
-                btn.onclick = () => switchData(item.id);
-                
-                container.appendChild(btn);
+                btnDesk.innerText = item.label.toUpperCase() + " 2026";
+                btnDesk.onclick = () => switchData(item.id);
+                container.appendChild(btnDesk);
+
+                // Mobile Sidebar Button
+                const btnMob = document.createElement('button');
+                btnMob.className = isActive
+                    ? "w-full text-left px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold shadow-sm"
+                    : "w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 font-medium";
+                btnMob.innerHTML = `<i class="fa-regular fa-calendar mr-2"></i> ${item.label.toUpperCase()} 2026`;
+                btnMob.onclick = () => {
+                    switchData(item.id);
+                    toggleSidebar(); // Close sidebar after selection
+                };
+                containerMobile.appendChild(btnMob);
             });
         }
 
@@ -597,10 +710,7 @@
             const chartsGrid = document.getElementById('chartsGrid');
             const wrappers = document.querySelectorAll('.chart-wrapper');
 
-            // GANTI SELURUH BLOK IF/ELSE DI DALAM FUNGSI updateDashboard DENGAN INI:
-            
             if (isAggregate) {
-                // MODE REGION: 2 Kolom, Chart Besar
                 chartsGrid.className = "grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 transition-all duration-300";
                 wrappers.forEach(w => w.classList.remove('compact'));
                 
@@ -609,7 +719,6 @@
                     updateRankButtons(key);
                 });
             } else {
-                // MODE SINGLE BRANCH: 4 Kolom (Bukan 5!) agar 4 chart muat di baris 1
                 chartsGrid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-6 transition-all duration-300";
                 wrappers.forEach(w => w.classList.add('compact'));
             }
