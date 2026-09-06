@@ -1121,7 +1121,7 @@
             const titleEl = document.getElementById('headerTitle');
             const config = jsonFiles.find(f => f.id === currentPeriodId);
             const monthName = config ? config.label.toUpperCase() : 'DATA';
-            titleEl.innerText = `CONTRIBUTION MARGIN '+<br>+'[${monthName} 2026]`;
+            titleEl.innerText = `CONTRIBUTION MARGIN\n[${monthName} 2026]`;
         }
 
         function updateHeaderSubtitle() {
