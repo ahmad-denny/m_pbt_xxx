@@ -361,58 +361,54 @@
                 </div>
             </div>
 
-            <!-- EXECUTIVE SUMMARY SECTION FOR C-LEVEL (Terletak dibawah KPI) -->
-            <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-200 mb-6">
-                <div class="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
-                    <i class="fa-solid fa-chart-line text-blue-600 text-lg"></i>
-                    <h2 class="text-sm sm:text-base font-bold text-slate-800 uppercase tracking-wide">Ringkasan Eksekutif & Review Manajemen (C-Level)</h2>
+            <!-- EXECUTIVE MANAGEMENT REVIEW SUMMARY SECTION -->
+            <div id="executiveSummaryContainer" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
+                <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-2">
+                    <div class="p-1.5 bg-slate-900 text-white rounded-lg"><i class="fa-solid fa-chart-line text-sm"></i></div>
+                    <h2 class="text-sm sm:text-base font-bold text-slate-800">Ringkasan Eksekutif & Review Manajemen (C-Level)</h2>
                 </div>
                 
-                <p class="text-xs sm:text-sm font-semibold text-slate-700 mb-2">3 Poin Utama Status Kesehatan Bisnis Saat Ini:</p>
-                <ul class="list-disc list-inside text-xs sm:text-sm text-slate-600 space-y-1 mb-4 pl-1">
-                    <li><strong class="text-slate-800">Tekanan Profitabilitas Tinggi:</strong> Mayoritas cabang mencatatkan PBT negatif dengan gap deviasi yang lebar terhadap target regional.</li>
-                    <li><strong class="text-slate-800">Likuiditas Tidak Produktif (Low FDR):</strong> Dana Pihak Ketiga (DPK) / Asset tumbuh sangat baik tetapi tidak terdistribusi secara optimal ke penyaluran pembiayaan.</li>
-                    <li><strong class="text-slate-800">Efisiensi COF & Kualitas Aset Terjaga Baik:</strong> Proporsi CASA dan Cost of Fund berada pada rentang batas sehat meski terdapat risiko terpusat pada cabang tertentu.</li>
-                </ul>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gray-100 pt-4">
-                    <!-- 1. Analisis Kinerja & Tren -->
-                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200/80">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1.5">
-                            <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">1</span>
-                            Analisis Kinerja & Tren
+                <div class="space-y-4 text-xs sm:text-sm text-slate-700">
+                    <!-- Status Kesehatan Bisnis -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-heart-pulse text-rose-500"></i> Status Kesehatan Bisnis Saat Ini
                         </h3>
-                        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                            <p><strong class="text-emerald-600">Metrik Naik/Positif:</strong> Pertumbuhan Asset melampaui target di beberapa cabang utama (misal Pekanbaru, Pangkal Pinang, Lampung). CASA Ratio berada pada kondisi sehat (rata-rata &ge;60%) dan COF terjaga di level optimal (&le;2.3%).</p>
-                            <p><strong class="text-rose-600">Metrik Turun/Underperform:</strong> PBT After HOCA dan Fee Based Income (FBI) secara agregat tertekan jauh di bawah target. Sebagian besar cabang gagal memenuhi target profitabilitas.</p>
-                            <p><strong class="text-amber-600">Anomali:</strong> FDR Ratio relatif sangat rendah (jauh di bawah ideal banking standar 80-90%), menunjukkan adanya penumpukan DPK tanpa ekspansi pembiayaan yang sepadan.</p>
-                        </div>
+                        <ul id="execHealthPoints" class="list-disc list-inside space-y-1 text-slate-600 pl-1">
+                            <!-- Injected by JS -->
+                        </ul>
                     </div>
 
-                    <!-- 2. Root Cause -->
-                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200/80">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1.5">
-                            <span class="bg-amber-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">2</span>
-                            Root Cause (Akar Masalah)
-                        </h3>
-                        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                            <p><strong>Rendahnya Yield Pembiayaan:</strong> Lambatnya ekspansi pembiayaan berkualitas (FDR rendah) menyebabkan pendapatan margin/ujrah tidak mencukupi untuk menutup biaya operasional dan beban HOCA.</p>
-                            <p><strong>Penetrasi Produk Non-Bunga Rendah:</strong> Produk penghasil Fee Based Income (FBI) belum tergarap optimal di tingkat jaringan cabang.</p>
-                            <p><strong>Beban CKPN/PPAP Berkelompok:</strong> Terdapat lonjakan PPAP/YTD &gt;1% di unit kerja tertentu (misal Banda Aceh dan Lampung) yang menggerus margin laba secara signifikan.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- 1. Analisis Kinerja & Tren -->
+                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                            <h4 class="font-bold text-blue-900 mb-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i> 1. Analisis Kinerja & Tren
+                            </h4>
+                            <div id="execPerfAnalysis" class="space-y-1.5 leading-relaxed text-slate-600">
+                                <!-- Injected by JS -->
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- 3. Rekomendasi Tindakan -->
-                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200/80">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-800 mb-2 flex items-center gap-1.5">
-                            <span class="bg-emerald-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]">3</span>
-                            Rekomendasi Tindakan (Action Plan)
-                        </h3>
-                        <ol class="list-decimal list-inside text-xs text-slate-600 space-y-1.5 leading-relaxed">
-                            <li><strong>Akselerasi Ekspansi Pembiayaan Sehat (FDR Campaign):</strong> Melakukan penyaluran pembiayaan produktif berbunga sehat dengan prioritas pada segmen berisiko rendah guna meningkatkan earning asset.</li>
-                            <li><strong>Program Re-koleksi & Recovery PPAP:</strong> Membentuk task force khusus untuk penanganan kredit bermasalah/PPAP pada cabang berisiko tinggi guna memulihkan cadangan kerugian menjadi pendapatan.</li>
-                            <li><strong>Cross-Selling & Cross-Serving FBI:</strong> Mengoptimalkan penjualan produk transaksi digital, bancassurance, dan wealth management untuk mendongkrak perolehan FBI di seluruh unit kerja.</li>
-                        </ol>
+                        <!-- 2. Root Cause -->
+                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                            <h4 class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-brain text-amber-600"></i> 2. Root Cause (Akar Masalah)
+                            </h4>
+                            <div id="execRootCause" class="space-y-1.5 leading-relaxed text-slate-600">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+
+                        <!-- 3. Rekomendasi Tindakan -->
+                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                            <h4 class="font-bold text-emerald-900 mb-1.5 flex items-center gap-1">
+                                <i class="fa-solid fa-list-check text-emerald-600"></i> 3. Rekomendasi Action Plan
+                            </h4>
+                            <ol id="execActionPlan" class="list-decimal list-inside space-y-1.5 leading-relaxed text-slate-600">
+                                <!-- Injected by JS -->
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -782,11 +778,13 @@
                 updateCards(rawData); 
                 renderAllCharts(rawData);
                 updateTable(rawData);
+                generateExecutiveSummary(rawData);
             } else {
                 const singleData = rawData.filter(d => d.name === filterValue);
                 updateCards(singleData);
                 setTimeout(() => renderAllCharts(singleData), 50);
                 updateTable(singleData);
+                generateExecutiveSummary(singleData);
             }
         }
 
@@ -932,6 +930,98 @@
                     document.getElementById('iconPPAP').innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
                 }
             }
+        }
+
+        // --- DYNAMIC EXECUTIVE SUMMARY GENERATOR FOR C-LEVEL REVIEW ---
+        function generateExecutiveSummary(data) {
+            const fmt = (n) => new Intl.NumberFormat('id-ID').format(n);
+            const isAggregate = currentMode === 'ALL';
+
+            const totalPBT = data.reduce((a,b) => a + b.pbt, 0);
+            const totalTgtPBT = data.reduce((a,b) => a + b.tgtPbt, 0);
+            const gapPBT = totalPBT - totalTgtPBT;
+
+            const totalAsset = data.reduce((a,b) => a + b.asset, 0);
+            const totalTgtAsset = data.reduce((a,b) => a + b.tgtAsset, 0);
+            const gapAsset = data.reduce((a,b) => a + b.gapAsset, 0);
+
+            const avgCASA = data.length > 0 ? (data.reduce((a,b) => a + b.casaPct, 0) / data.length) : 0;
+            const avgCOF = data.length > 0 ? (data.reduce((a,b) => a + b.cof, 0) / data.length) : 0;
+
+            const totalFunding = data.reduce((a,b) => a + b.actFunding, 0);
+            const totalFinancing = data.reduce((a,b) => a + b.actFinancing, 0);
+            const calcFDR = totalFunding > 0 ? ((totalFinancing / totalFunding) * 100) : 0;
+
+            const totalFBI = data.reduce((a,b) => a + b.fbi, 0);
+            const totalTgtFBI = data.reduce((a,b) => a + b.tgtFbi, 0);
+            const gapFBI = data.reduce((a,b) => a + b.gapFbi, 0);
+
+            const ppapIssueCount = data.filter(d => d.ppap > 1).length;
+
+            // 1. Ringkasan Eksekutif (3 Poin Utama Status Kesehatan Bisnis)
+            let healthP1 = "", healthP2 = "", healthP3 = "";
+
+            if (isAggregate) {
+                const pbtStatus = gapPBT >= 0 ? "memenuhi target" : "mengalami defisit signifikan";
+                healthP1 = `<strong>Profitabilitas & Profit Before Tax:</strong> Profit regional mencapai IDR ${fmt(totalPBT)} (${pbtStatus} dengan GAP IDR ${fmt(gapPBT)} vs target IDR ${fmt(totalTgtPBT)}).`;
+                healthP2 = `<strong>Struktur Pendanaan & Likuiditas:</strong> Rata-rata CASA Ratio berada di level ${avgCASA.toFixed(1)}% dengan Cost of Fund (COF) terkendali di ${avgCOF.toFixed(2)}%, namun penyaluran pembiayaan (FDR ${calcFDR.toFixed(1)}%) masih tergolong rendah di bawah standar optimalisasi.`;
+                healthP3 = `<strong>Kualitas Aset & Risiko (PPAP):</strong> Terdapat ${ppapIssueCount} cabang dengan rasio PPAP/YTD > 1% yang memerlukan intervensi penanganan risiko secara intensif.`;
+            } else {
+                const d = data[0] || {};
+                const pbtStatus = d.pbt >= d.tgtPbt ? "ACHIEVED" : "UNDERPERFORM";
+                healthP1 = `<strong>Profitabilitas Cabang (${d.name}):</strong> Status PBT ${pbtStatus} (PBT Act: IDR ${fmt(d.pbt)} vs Target: IDR ${fmt(d.tgtPbt)} | Gap: IDR ${fmt(d.pbt - d.tgtPbt)}).`;
+                healthP2 = `<strong>Efisiensi Pendanaan & FDR:</strong> Rasio CASA tercatat ${d.casaPct}% (COF ${d.cof.toFixed(2)}%) dengan FDR sebesar ${d.fdrPct}%.`;
+                healthP3 = `<strong>Tingkat Risiko Pembiayaan:</strong> Tingkat PPAP/YTD tercatat ${d.ppap}% (${d.ppap > 1 ? "Perlu Pengawasan Khusus / Warning" : "Aman & Terkendali"}).`;
+            }
+
+            document.getElementById('execHealthPoints').innerHTML = `
+                <li>${healthP1}</li>
+                <li>${healthP2}</li>
+                <li>${healthP3}</li>
+            `;
+
+            // 2. Analisis Kinerja & Tren
+            let perfHTML = "";
+            let pbtTrend = gapPBT >= 0 ? `<span class="text-green-600 font-bold">▲ On Target</span>` : `<span class="text-red-500 font-bold">▼ Lagging</span>`;
+            let assetTrend = gapAsset >= 0 ? `<span class="text-green-600 font-bold">▲ Surplus</span>` : `<span class="text-red-500 font-bold">▼ Shortfall</span>`;
+            let fbiTrend = gapFBI >= 0 ? `<span class="text-green-600 font-bold">▲ Achieved</span>` : `<span class="text-red-500 font-bold">▼ Defisit</span>`;
+
+            perfHTML = `
+                <p>• <strong>PBT:</strong> Status ${pbtTrend} sebesar IDR ${fmt(totalPBT)} (Gap: IDR ${fmt(gapPBT)}).</p>
+                <p>• <strong>Aset:</strong> Status ${assetTrend} di IDR ${fmt(totalAsset)} (Target: IDR ${fmt(totalTgtAsset)}).</p>
+                <p>• <strong>CASA & COF:</strong> CASA ${avgCASA.toFixed(1)}% | Cost of Fund ${avgCOF.toFixed(2)}% (${avgCOF <= 2.30 ? "Efektif ≤2.30%" : "Tinggi >2.30%"}).</p>
+                <p>• <strong>FBI & FDR:</strong> FBI ${fbiTrend} (IDR ${fmt(totalFBI)}) | Rasio FDR ${calcFDR.toFixed(1)}%.</p>
+            `;
+            document.getElementById('execPerfAnalysis').innerHTML = perfHTML;
+
+            // 3. Root Cause (Akar Masalah)
+            let rcHTML = "";
+            if (calcFDR < 30) {
+                rcHTML += `<p>• <strong>Ekspansi Pembiayaan Lambat:</strong> FDR (${calcFDR.toFixed(1)}%) relatif rendah akibat pertumbuhan pembiayaan belum berimbang dengan penghimpunan dana.</p>`;
+            } else {
+                rcHTML += `<p>• <strong>Penyaluran Pembiayaan Cukup Baik:</strong> FDR di tingkat ${calcFDR.toFixed(1)}% mendukung yield portofolio.</p>`;
+            }
+
+            if (gapFBI < 0) {
+                rcHTML += `<p>• <strong>Fee Income Belum Optimal:</strong> FBI belum mencukupi target penutup beban operasional (Gap: IDR ${fmt(gapFBI)}).</p>`;
+            } else {
+                rcHTML += `<p>• <strong>Pendapatan Berbasis Jasa Unggul:</strong> Kontribusi FBI mendorong profitabilitas.</p>`;
+            }
+
+            if (ppapIssueCount > 0) {
+                rcHTML += `<p>• <strong>Tekanan Beban Cadangan (PPAP):</strong> Adanya NPF/kualitas pembiayaan di ${ppapIssueCount} cabang yang memicu pencadangan tinggi.</p>`;
+            } else {
+                rcHTML += `<p>• <strong>Risiko Kualitas Aset Rendah:</strong> Beban PPAP terkendali di bawah threshold 1%.</p>`;
+            }
+            document.getElementById('execRootCause').innerHTML = rcHTML;
+
+            // 4. Rekomendasi Action Plan (3 Langkah Strategis)
+            let actionHTML = "";
+            actionHTML += `<li><strong>Gencarkan Pemasaran Pembiayaan Berkualitas:</strong> Tingkatkan ekspansi pembiayaan sehat untuk menaikkan rasio FDR ke target ideal dan mendongkrak margin laba bersih.</li>`;
+            actionHTML += `<li><strong>Akselerasi Cross-Selling & Transaction Banking:</strong> Dorong peningkatkan FBI melalui layanan digital, remittance, serta produk wealth/bancassurance guna menutup gap fee.</li>`;
+            actionHTML += `<li><strong>Pengetatan Restrukturisasi & Recovery NPF:</strong> Lakukan tindakan mitigasi khusus pada unit/cabang dengan PPAP > 1% untuk menurunkan beban pencadangan dan memperbaiki Bottom-Line PBT.</li>`;
+
+            document.getElementById('execActionPlan').innerHTML = actionHTML;
         }
 
         function updateTable(data) {
