@@ -1,590 +1,1136 @@
-Berikut adalah kode lengkap `index.html` yang sudah terintegrasi penuh dengan section **Ringkasan Eksekutif & Analisis Manajemen (C-Level)** di bawah grid kartu KPI, lengkap dengan komponen Tailwind CSS, FontAwesome, Chart.js, serta logika JavaScript reaktifnya:
-
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Performance Dashboard - Region Sumatera</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Branch KPI Monitoring - Region Sumatera</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2 rounded-lg text-white">
-                    <i class="fa-solid fa-chart-line text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-base sm:text-lg leading-tight">Sales Performance Dashboard</h1>
-                    <p class="text-xs text-slate-400">Monitoring Performance - Region Sumatera</p>
-                </div>
-            </div>
-            
-            <!-- Controls / Filters -->
-            <div class="flex items-center gap-2 sm:gap-4">
-                <!-- Period Selector -->
-                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                    <i class="fa-solid fa-calendar-days text-slate-400 text-xs"></i>
-                    <select id="periodSelect" onchange="handlePeriodChange(this.value)" class="bg-transparent text-xs sm:text-sm font-semibold text-white focus:outline-none cursor-pointer">
-                        <!-- Options generated dynamically -->
-                    </select>
-                </div>
-
-                <!-- Branch / Mode Selector -->
-                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                    <i class="fa-solid fa-building-columns text-slate-400 text-xs"></i>
-                    <select id="branchSelect" onchange="handleBranchChange(this.value)" class="bg-transparent text-xs sm:text-sm font-semibold text-white focus:outline-none cursor-pointer">
-                        <option value="ALL">Semua Cabang (Region Sumatera)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- Header Info & As Of Date -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
-            <div>
-                <h2 id="dashboardTitle" class="text-xl sm:text-2xl font-black text-slate-800">RINGKASAN KINERJA REGION SUMATERA</h2>
-                <p id="asOfDateText" class="text-xs sm:text-sm text-slate-500 font-medium"></p>
-            </div>
-        </div>
-
-        <!-- Cards Grid (KPI Cards) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">
-            
-            <!-- Card 1: PBT -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">PBT</span>
-                        <i class="fa-solid fa-money-bill-wave text-blue-500 text-xs"></i>
-                    </div>
-                    <div id="cardPbtValue" class="text-base sm:text-lg font-black text-slate-800">Rp 0</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: <span id="cardPbtTgt">0</span></span>
-                    <span id="cardPbtGap" class="font-bold"></span>
-                </div>
-            </div>
-
-            <!-- Card 2: Total Asset -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">Total Asset</span>
-                        <i class="fa-solid fa-vault text-emerald-500 text-xs"></i>
-                    </div>
-                    <div id="cardAssetValue" class="text-base sm:text-lg font-black text-slate-800">Rp 0</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: <span id="cardAssetTgt">0</span></span>
-                    <span id="cardAssetGap" class="font-bold"></span>
-                </div>
-            </div>
-
-            <!-- Card 3: CASA % -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">CASA %</span>
-                        <i class="fa-solid fa-chart-pie text-indigo-500 text-xs"></i>
-                    </div>
-                    <div id="cardCasaValue" class="text-base sm:text-lg font-black text-slate-800">0.0%</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: &ge; 60%</span>
-                    <span id="cardCasaStatus" class="font-bold"></span>
-                </div>
-            </div>
-
-            <!-- Card 4: COF % -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">Cost of Fund</span>
-                        <i class="fa-solid fa-percent text-amber-500 text-xs"></i>
-                    </div>
-                    <div id="cardCofValue" class="text-base sm:text-lg font-black text-slate-800">0.00%</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: &le; 2.3%</span>
-                    <span id="cardCofStatus" class="font-bold"></span>
-                </div>
-            </div>
-
-            <!-- Card 5: FDR % -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">FDR</span>
-                        <i class="fa-solid fa-scale-balanced text-teal-500 text-xs"></i>
-                    </div>
-                    <div id="cardFdrValue" class="text-base sm:text-lg font-black text-slate-800">0.0%</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: &ge; 30%</span>
-                    <span id="cardFdrStatus" class="font-bold"></span>
-                </div>
-            </div>
-
-            <!-- Card 6: FBI -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between text-slate-500 mb-1">
-                        <span class="text-xs font-bold uppercase tracking-wider">FBI</span>
-                        <i class="fa-solid fa-hand-holding-dollar text-purple-500 text-xs"></i>
-                    </div>
-                    <div id="cardFbiValue" class="text-base sm:text-lg font-black text-slate-800">Rp 0</div>
-                </div>
-                <div class="mt-2 pt-2 border-t border-slate-100 text-[11px] flex justify-between items-center">
-                    <span class="text-slate-500">Target: <span id="cardFbiTgt">0</span></span>
-                    <span id="cardFbiGap" class="font-bold"></span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- EXECUTIVE SUMMARY (C-LEVEL REVIEW) -->
-        <div id="executiveSummary" class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-200 mb-6 transition-all duration-300">
-            <div class="border-b border-slate-200 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                <div>
-                    <h2 class="text-base sm:text-lg font-extrabold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-blue-600"></i> Ringkasan Eksekutif & Analisis Kinerja Bisnis
-                    </h2>
-                    <p class="text-xs text-slate-500">Laporan Tinjauan Manajemen Tingkat Atas (C-Level Review)</p>
-                </div>
-                <span id="summaryPeriodBadge" class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">
-                    PERIODE: JULI 2026
-                </span>
-            </div>
-
-            <!-- 3 Poin Utama Kesehatan Bisnis -->
-            <div class="mb-5 bg-slate-50 p-3.5 sm:p-4 rounded-lg border border-slate-200">
-                <h3 class="text-xs sm:text-sm font-bold text-slate-800 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                    <i class="fa-solid fa-heart-pulse text-rose-500"></i> Status Kesehatan Bisnis Saat Ini (3 Poin Utama)
-                </h3>
-                <ul class="text-xs sm:text-sm text-slate-700 space-y-2 list-disc list-inside font-medium" id="healthStatusList">
-                    <!-- Injected by JS -->
-                </ul>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs sm:text-sm">
-                <!-- 1. Analisis Kinerja & Tren -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-2xs flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2 flex items-center gap-2 text-xs sm:text-sm uppercase tracking-wide">
-                            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-xs">1</span> 
-                            Analisis Kinerja & Tren
-                        </h3>
-                        <div id="summaryPerformance" class="space-y-2 text-slate-600">
-                            <!-- Injected by JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. Root Cause -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-2xs flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2 flex items-center gap-2 text-xs sm:text-sm uppercase tracking-wide">
-                            <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 font-extrabold flex items-center justify-center text-xs">2</span> 
-                            Akar Masalah (Root Cause)
-                        </h3>
-                        <div id="summaryRootCause" class="space-y-2 text-slate-600">
-                            <!-- Injected by JS -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. Action Plan -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-2xs flex flex-col justify-between">
-                    <div>
-                        <h3 class="font-bold text-slate-800 border-b border-slate-100 pb-2 mb-2 flex items-center gap-2 text-xs sm:text-sm uppercase tracking-wide">
-                            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 font-extrabold flex items-center justify-center text-xs">3</span> 
-                            Rekomendasi Tindakan
-                        </h3>
-                        <div id="summaryActionPlan" class="space-y-2 text-slate-600">
-                            <!-- Injected by JS -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            
-            <!-- Chart 1: PBT Performance per Branch -->
-            <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 text-sm sm:text-base">Perbandingan PBT vs Target per Cabang</h3>
-                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-medium">Dalam Juta Rp</span>
-                </div>
-                <div class="relative h-64 sm:h-80">
-                    <canvas id="pbtChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Chart 2: Asset & DPK Distribution -->
-            <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold text-slate-800 text-sm sm:text-base">Pencapaian Asset vs Target per Cabang</h3>
-                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-medium">Dalam Juta Rp</span>
-                </div>
-                <div class="relative h-64 sm:h-80">
-                    <canvas id="assetChart"></canvas>
-                </div>
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- JavaScript Application Logic -->
-    <script>
-        // Konfigurasi berkas JSON berdasarkan periode
-        const jsonFiles = [
-            { id: 'juli', label: 'Juli 2026', file: 'juli.json', asOf: '31 Juli 2026' },
-            { id: 'juni', label: 'Juni 2026', file: 'juni.json', asOf: '30 Juni 2026' }
-        ];
-
-        // Sample Data Fallback (Simulasi data JSON jika dijalankan lokal tanpa server)
-        const sampleDataJuli = [
-            { name: "Medan Utama", pbt: 1200, tgtPbt: 1500, asset: 450000, tgtAsset: 420000, casaPct: 68.2, cof: 2.10, actFunding: 450000, actFinancing: 120000, fdrPct: 26.6, fbi: 2100, tgtFbi: 2500, ppap: 0.8 },
-            { name: "Palembang", pbt: -800, tgtPbt: 1100, asset: 380000, tgtAsset: 390000, casaPct: 61.5, cof: 2.45, actFunding: 380000, actFinancing: 75000, fdrPct: 19.7, fbi: 1400, tgtFbi: 1800, ppap: 1.4 },
-            { name: "Padang", pbt: 450, tgtPbt: 800, asset: 290000, tgtAsset: 280000, casaPct: 65.0, cof: 2.20, actFunding: 290000, actFinancing: 68000, fdrPct: 23.4, fbi: 1100, tgtFbi: 1300, ppap: 0.5 },
-            { name: "Pekanbaru", pbt: 950, tgtPbt: 1000, asset: 360000, tgtAsset: 340000, casaPct: 64.1, cof: 2.25, actFunding: 360000, actFinancing: 82000, fdrPct: 22.7, fbi: 1650, tgtFbi: 1700, ppap: 0.7 },
-            { name: "Lampung", pbt: -1500, tgtPbt: 900, asset: 310000, tgtAsset: 300000, casaPct: 58.0, cof: 2.60, actFunding: 310000, actFinancing: 55000, fdrPct: 17.7, fbi: 900, tgtFbi: 1400, ppap: 1.8 },
-            { name: "Batam", pbt: 600, tgtPbt: 750, asset: 270000, tgtAsset: 250000, casaPct: 66.8, cof: 2.15, actFunding: 270000, actFinancing: 60000, fdrPct: 22.2, fbi: 1250, tgtFbi: 1350, ppap: 0.4 },
-            { name: "Jambi", pbt: -650, tgtPbt: 600, asset: 220000, tgtAsset: 230000, casaPct: 59.2, cof: 2.50, actFunding: 220000, actFinancing: 38000, fdrPct: 17.2, fbi: 700, tgtFbi: 1000, ppap: 1.2 },
-            { name: "Bengkulu", pbt: 150, tgtPbt: 400, asset: 180000, tgtAsset: 170000, casaPct: 62.0, cof: 2.30, actFunding: 180000, actFinancing: 32000, fdrPct: 17.7, fbi: 550, tgtFbi: 700, ppap: 0.6 },
-            { name: "Banda Aceh", pbt: 300, tgtPbt: 500, asset: 210000, tgtAsset: 200000, casaPct: 67.5, cof: 2.05, actFunding: 210000, actFinancing: 42000, fdrPct: 20.0, fbi: 800, tgtFbi: 900, ppap: 0.3 },
-            { name: "Padangsidimpuan", pbt: -111, tgtPbt: 300, asset: 140000, tgtAsset: 135000, casaPct: 59.5, cof: 2.40, actFunding: 140000, actFinancing: 25000, fdrPct: 17.8, fbi: 400, tgtFbi: 600, ppap: 1.1 }
-        ];
-
-        let rawData = [];
-        let currentPeriodId = 'juli';
-        let currentMode = 'ALL';
-        let pbtChartInstance = null;
-        let assetChartInstance = null;
-
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            initPeriodDropdown();
-            loadPeriodData(currentPeriodId);
-        });
-
-        function initPeriodDropdown() {
-            const select = document.getElementById('periodSelect');
-            select.innerHTML = '';
-            jsonFiles.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item.id;
-                opt.textContent = item.label;
-                select.appendChild(opt);
-            });
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; }
+        .card { transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+        
+        .chart-wrapper { position: relative; width: 100%; height: 280px; transition: height 0.3s ease; }
+        .chart-wrapper.compact { height: 220px; }
+        
+        @media (max-width: 640px) {
+            .chart-wrapper { height: 230px; }
+            .chart-wrapper.compact { height: 180px; }
         }
 
-        async function loadPeriodData(periodId) {
-            currentPeriodId = periodId;
-            const periodConfig = jsonFiles.find(f => f.id === periodId);
+        .chart-wrapper.compact { height: 195px; }
 
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .rank-btn { transition: all 0.2s; }
+        .rank-btn.active { background-color: #1e293b; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .rank-btn:not(.active):hover { background-color: #e2e8f0; }
+        .footer { text-align: center; padding: 15px 5px; font-size: 0.75rem; color: #64748b; margin-top: 10px; }        
+
+        body.logged-in #dashboardContent {
+            display: block !important;
+        }
+
+        /* --- MOBILE SIDEBAR STYLES --- */
+        #mobileSidebar {
+            position: fixed;
+            top: 0;
+            left: -100%; /* Hidden by default */
+            width: 280px;
+            height: 100vh;
+            background-color: #0f172a; /* Slate 900 */
+            z-index: 60;
+            transition: left 0.3s ease-in-out;
+            padding-top: 60px;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+
+        #mobileSidebar.open {
+            left: 0;
+        }
+
+        #sidebarOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 55;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        #sidebarOverlay.open {
+            display: block;
+        }
+
+        /* Hide desktop elements on mobile to move them to sidebar */
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            .mobile-sidebar-content { display: block !important; }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-sidebar-content { display: none !important; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 overflow-hidden" id="mainBody">
+
+    <!-- Overlay for Sidebar -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Mobile Sidebar Container -->
+    <div id="mobileSidebar">
+        <div class="p-4 border-b border-slate-700 flex justify-between items-center">
+            <h2 class="text-white font-bold text-lg">Contribution Margin</h2>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Content moved from Header to Sidebar for Mobile -->
+        <div class="p-4 space-y-6">
+            <!-- User Info Section -->
+            <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <p class="text-xs text-slate-400 uppercase mb-2">Logged in as</p>
+                <div class="flex items-center gap-3">
+                    <div id="userAvatarSidebar" class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white shrink-0">U</div>
+                    <div class="leading-tight">
+                        <p id="userNameSidebar" class="text-sm font-semibold text-white">-</p>
+                        <p id="userPosSidebar" class="text-xs text-slate-400">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Month PBT Tabs Section -->
+            <div>
+                <p class="text-xs text-slate-400 uppercase mb-2 font-bold">Select Period</p>
+                <div id="tabContainerMobile" class="flex flex-col gap-2">
+                    <!-- Tabs will be injected here by JS -->
+                </div>
+            </div>
+            
+            <!-- Additional Mobile Filters if needed later -->
+             <div class="pt-4 border-t border-slate-700">
+                <p class="text-xs text-slate-400 uppercase mb-2">Quick Actions</p>
+                <button onclick="window.location.reload()" class="w-full text-left px-3 py-2 rounded text-slate-300 hover:bg-slate-800 text-sm">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
+    <!-- ============================================ -->
+    <script>
+    (function () {
+        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
+        var SESSION_KEY = 'mpbt_auth_nik';
+        var USER_LIST_URL = 'user_list.json';
+
+        function goToLogin() { window.location.replace(LOGIN_PAGE_URL); }
+
+        function validateSession() {
+            var params = new URLSearchParams(window.location.search);
+            var nikFromUrl = params.get('auth_nik');
+            var nik = nikFromUrl || localStorage.getItem(SESSION_KEY);
+
+            if (!nik) { goToLogin(); return; }
+
+            fetch(USER_LIST_URL, { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('Gagal memuat user_list.json');
+                    return res.json();
+                })
+                .then(function (data) {
+                    var userList = Array.isArray(data.user_list) ? data.user_list : [];
+                    var user = userList.find(function (u) {
+                        return String(u.nik).trim() === String(nik).trim();
+                    });
+
+                    if (!user) { localStorage.removeItem(SESSION_KEY); goToLogin(); return; }
+
+                    localStorage.setItem(SESSION_KEY, String(user.nik));
+
+                    if (nikFromUrl) {
+                        params.delete('auth_nik');
+                        params.delete('auth_ts');
+                        var qs = params.toString();
+                        var newUrl = window.location.pathname + (qs ? '?' + qs : '');
+                        window.history.replaceState({}, document.title, newUrl);
+                    }
+
+                    document.dispatchEvent(new CustomEvent('authReady', { detail: user }));
+                })
+                .catch(function (err) { console.error('Auth check failed:', err); goToLogin(); });
+        }
+
+        validateSession();
+    })();
+    </script>
+    <!-- ============================================ -->
+
+    <div id="dashboardContent" class="hidden">
+        <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+            <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+                
+                <!-- Header Top Row: Logo, Title, and Mobile Menu Button -->
+                <div class="flex items-center justify-between w-full md:w-auto">
+                    <div class="flex items-center space-x-3">
+                        <!-- Hamburger Menu Button (Mobile Only) -->
+                        <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-1 mr-2">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
+
+                        <div class="bg-white-600 p-1 rounded-lg shrink-0"><img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="32" height="32"></div>
+                        <div>
+                            <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight" id="headerTitle">CONTRIBUTION MARGIN <br>[JUNI 2026]</h1>
+                            <p class="text-[10px] sm:text-xs text-slate-400 sm:block">PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP</p>
+                        </div>
+                    </div>
+                </div>            
+                
+                <!-- Controls Row: Tabs and Filter -->
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-between">
+                    
+                    <!-- Desktop Tabs (Hidden on Mobile, moved to Sidebar) -->
+                    <div id="tabContainer" class="hidden md:flex bg-slate-800 rounded-lg p-1 border border-slate-700 overflow-x-auto max-w-full">
+                        <!-- Tabs injected by JS -->
+                    </div>
+                    <!-- Desktop User Info Chip (Hidden on Mobile) -->
+                    <div id="userInfoChip" class="hidden md:flex items-center gap-2 pl-3 ml-1 border-l border-slate-700">
+                        <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">U</div>
+                        <div class="leading-tight text-left">
+                            <p id="userNameChip" class="text-xs font-semibold whitespace-nowrap">-</p>
+                            <p id="userPosChip" class="text-[10px] text-slate-400 whitespace-nowrap">-</p>
+                        </div>
+                    </div>                    
+
+                    <!-- Branch Filter (Stays below title/controls as requested) -->
+                    <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 flex-1 sm:flex-none w-full md:w-auto">
+                        <select id="branchFilter" class="bg-slate-900 text-white text-xs sm:text-sm rounded-md border-none focus:ring-2 focus:ring-blue-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px]">
+                            <option value="ALL">📊 REGION SUMATERA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">            
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-blue-500 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPBT"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PBT After HOCA</p>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumPBT">-</h3>
+                        </div>
+                        <div class="p-1 sm:p-1.5 bg-indigo-50 rounded-full text-indigo-600 hidden sm:block"><i class="fa-solid fa-coins text-xs sm:text-sm"></i></div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetPBT" class="font-semibold">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Gap PBT:</span><span id="gapPBT" class="font-bold">-</span></div>
+                        <div id="countPbtPosNeg" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">🟢 Positif</span> <span id="cntPbtPos" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">🔴 Negatif</span> <span id="cntPbtNeg" class="font-bold">0</span></div>
+                        </div>
+                        <div id="countPBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntPbtOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntPbtNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-emerald-500 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconAsset"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Asset</p>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumAsset">-</h3>
+                        </div>
+                        <div class="p-1 sm:p-1.5 bg-blue-50 rounded-full text-blue-600 hidden sm:block"><i class="fa-solid fa-building-columns text-xs sm:text-sm"></i></div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetAsset" class="font-semibold">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Gap Asset:</span><span id="gapAsset" class="font-bold">-</span></div>
+                        <div id="countAsset" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntAssetOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntAssetNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-rose-500 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconCASA"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div class="w-full">
+                            <div class="flex justify-between items-center">
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">CASA Ratio</p>
+                                <span id="casaIndicator" class="text-xs"></span>
+                            </div>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgCASA">-</h3>
+                            <div class="mt-1 pt-1 border-t border-dashed border-gray-200 flex justify-between items-center">
+                                <div>
+                                    <p class="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase">COF (≤2.3%)</p>
+                                    <div class="flex items-baseline gap-1">
+                                        <span class="text-xs sm:text-sm font-extrabold text-slate-700" id="avgCOF">-</span>
+                                        <span id="cofIndicator" class="text-xs"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Actual:</span><span id="actCasaAmt" class="font-semibold text-slate-700">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Gap CASA:</span><span id="gapCasaAmt" class="font-bold">-</span></div>
+                        <div id="countCASA" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ CASA ≥60%</span> <span id="cntCasaOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">⚠️ <60%</span> <span id="cntCasaNo" class="font-bold">0</span></div>
+                            <div class="flex justify-between mt-0.5"><span class="text-green-600">✅ COF ≤2.3%</span> <span id="cntCofOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-orange-500">⚠️ COF >2.3%</span> <span id="cntCofNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-amber-500 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFDR"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">FDR Ratio</p>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgFDR">-</h3>
+                        </div>
+                        <div class="p-1 sm:p-1.5 bg-violet-50 rounded-full text-violet-600 hidden sm:block"><i class="fa-solid fa-money-bill-transfer text-xs sm:text-sm"></i></div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Financing:</span><span id="actFinancing" class="font-semibold text-slate-700">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Gap Fin:</span><span id="gapFinancing" class="font-bold">-</span></div>
+                        <div id="countFDR" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ FDR ≥30%</span> <span id="cntFdrOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-orange-500">⚠️ <30%</span> <span id="cntFdrNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFBI"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Fee Based Income</p>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumFBI">-</h3>
+                        </div>
+                        <div class="p-1 sm:p-1.5 bg-amber-50 rounded-full text-amber-600 hidden sm:block"><i class="fa-solid fa-briefcase text-xs sm:text-sm"></i></div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target FBI:</span><span id="targetFBI" class="font-semibold">-</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Gap FBI:</span><span id="gapFBI" class="font-bold">-</span></div>
+                        <div id="countFBI" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntFbiOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntFbiNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-fuchsia-500 relative overflow-hidden">
+                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPPAP"></div>
+                    <div class="flex justify-between items-start pr-6 sm:pr-8">
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PPAP / YTD > 1%</p>
+                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="valPPAP">-</h3>
+                        </div>
+                        <div class="p-1 sm:p-1.5 bg-rose-50 rounded-full text-rose-600 hidden sm:block"><i class="fa-solid fa-triangle-exclamation text-xs sm:text-sm"></i></div>
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-gray-100">
+                         <span id="statusPPAP" class="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 block text-center">-</span>
+                         <div id="countPPAP" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 text-[9px] sm:text-[10px] hidden">
+                            <div class="flex justify-between"><span class="text-green-600">✅ Secured (<1%)</span> <span id="cntPpapOk" class="font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-red-500">⚠️ Alert (>1%)</span> <span id="cntPpapNo" class="font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 transition-all duration-300">
+                
+                <!-- CHART 1: PBT -->
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-2 gap-1">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Profit Before Tax After HOCA</h3>
+                        <div id="ctrl-pbt" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <button onclick="setChartRank('pbt', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                            <button onclick="setChartRank('pbt', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                            <button onclick="setChartRank('pbt', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper flex-grow" id="wrap-pbt"><canvas id="pbtChart"></canvas></div>
+                </div>
+
+                <!-- CHART 2: ASSET -->
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-2 gap-1">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Asset Performance</h3>
+                        <div id="ctrl-asset" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <button onclick="setChartRank('asset', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                            <button onclick="setChartRank('asset', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                            <button onclick="setChartRank('asset', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper flex-grow" id="wrap-asset"><canvas id="assetChart"></canvas></div>
+                </div>
+                
+                <!-- CHART 3: CASA -->
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-2 gap-1">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">CASA Analysis</h3>
+                        <div id="ctrl-casa" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <button onclick="setChartRank('casa', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                            <button onclick="setChartRank('casa', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                            <button onclick="setChartRank('casa', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper flex-grow" id="wrap-casa"><canvas id="casaChart"></canvas></div>
+                </div>
+
+                <!-- CHART 4: FDR -->
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-2 gap-1">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Financing & FDR Ratio</h3>
+                        <div id="ctrl-fdr" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <button onclick="setChartRank('fdr', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                            <button onclick="setChartRank('fdr', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                            <button onclick="setChartRank('fdr', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper flex-grow" id="wrap-fdr"><canvas id="fdrChart"></canvas></div>
+                </div>
+
+                <!-- CHART 5: FBI -->
+                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-2 gap-1">
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Fee Based Income</h3>
+                        <div id="ctrl-fbi" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <button onclick="setChartRank('fbi', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                            <button onclick="setChartRank('fbi', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                            <button onclick="setChartRank('fbi', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper flex-grow" id="wrap-fbi"><canvas id="fbiChart"></canvas></div>
+                </div>
+            </div>
+
+            <div id="tableSection" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                <div class="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
+                </div>
+                <div class="overflow-x-auto max-h-[400px]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                            <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border-b border-gray-200">
+                                <th class="p-2 sm:p-3 font-bold sticky left-0 bg-white z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">PBT Act</th>
+                                <th class="p-2 sm:p-3 font-bold text-right text-red-500">Gap PBT</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Asset Act</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Gap Asset</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">CASA %</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Act CASA</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Gap CASA</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">COF %</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">FDR %</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Act Financing</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Gap Financing</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">FBI Act</th>
+                                <th class="p-2 sm:p-3 font-bold text-right">Gap FBI</th>
+                                <th class="p-2 sm:p-3 font-bold text-center">PPAP/YTD</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
+    </div>
+
+    <script>
+        let rawData = [];
+        let charts = {};
+        let currentMode = 'ALL'; 
+        let chartRanks = { pbt: 'ALL', asset: 'ALL', casa: 'ALL', fdr: 'ALL', fbi: 'ALL' };
+        
+        const jsonFiles = [            
+            { id: 'juni', label: 'Juni', file: 'juni26.json'},
+            { id: 'juli', label: 'Juli', file: 'juli26.json' }
+        ];
+
+        let currentPeriodId = 'juli'; 
+
+        // --- SIDEBAR TOGGLE FUNCTION ---
+        function toggleSidebar() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        function parseVal(val) {
+            if (typeof val === 'number') return val;
+            if (!val) return 0;
+            let cleaned = val.toString().replace(/,/g, '').replace(/%/g, '').trim();
+            let parsed = parseFloat(cleaned);
+            return isNaN(parsed) ? 0 : parsed;
+        }
+
+        async function loadData(keepBranch = null) {
             try {
-                const res = await fetch(periodConfig.file);
-                if (!res.ok) throw new Error('Fetch status error');
-                rawData = await res.json();
-            } catch (e) {
-                console.warn('Gagal memuat JSON lokal, menggunakan fallback sample data:', e);
-                rawData = sampleDataJuli;
+                const config = jsonFiles.find(f => f.id === currentPeriodId);
+                if (!config) throw new Error("Konfigurasi periode tidak ditemukan");
+
+                const filename = config.file;
+                
+                const response = await fetch(filename);
+                if (!response.ok) throw new Error(`File ${filename} not upload yet`);
+                
+                const json = await response.json();
+                
+                rawData = json.map(d => ({
+                    name: d.name ? d.name.trim() : '',
+                    pbt: parseVal(d.pbt),
+                    tgtPbt: parseVal(d.tgtPbt),
+                    asset: parseVal(d.asset),
+                    tgtAsset: parseVal(d.tgtAsset),
+                    gapAsset: parseVal(d.gapAsset),
+                    casaPct: parseVal(d.casaPct),
+                    actCasa: parseVal(d.actCasa),
+                    gapCasa: parseVal(d.gapCasa),
+                    cof: parseVal(d.cof),
+                    fdrPct: parseVal(d.fdrPct),
+                    actFunding: parseVal(d.actFunding),
+                    actFinancing: parseVal(d.actFinancing),
+                    gapFinancing: parseVal(d.gapFinancing),
+                    fbi: parseVal(d.fbi),
+                    tgtFbi: parseVal(d.tgtFbi),
+                    gapFbi: parseVal(d.gapFbi),
+                    ppap: parseVal(d.ppap)
+                }));
+
+                initFilter();
+
+                let targetBranch = 'ALL';
+                if (keepBranch && keepBranch !== 'ALL') {
+                    const exists = rawData.some(d => d.name === keepBranch);
+                    if (exists) {
+                        targetBranch = keepBranch;
+                    } else {
+                        console.warn(`Cabang ${keepBranch} tidak ditemukan di data ${currentPeriodId}`);
+                        targetBranch = 'ALL'; 
+                    }
+                }
+
+                document.getElementById('branchFilter').value = targetBranch;
+                updateDashboard(targetBranch);
+                updateHeaderTitle();
+
+            } catch (err) {
+                console.error("Error loading JSON:", err);
+                alert(err.message);
+
+                if (currentPeriodId !== 'juni') {
+                    console.warn("Fallback ke data Juni karena error...");
+                    currentPeriodId = 'juni';
+                    renderTabs();
+                    loadData(keepBranch);
+                }
+            }
+        }
+
+        document.addEventListener('authReady', function (e) {
+            var user = e.detail;
+            if (user) {
+                var displayName = user.nama || 'User';
+                var displayPos = user.posisi || '-';
+
+                // Update Desktop Header Chips
+                var nameEl = document.getElementById('userNameChip');
+                var posEl = document.getElementById('userPosChip');
+                var avatarEl = document.getElementById('userAvatarCircle');
+                if (nameEl) nameEl.textContent = displayName;
+                if (posEl) posEl.textContent = displayPos;
+                if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+
+                // Update Sidebar User Info
+                var nameSide = document.getElementById('userNameSidebar');
+                var posSide = document.getElementById('userPosSidebar');
+                var avatarSide = document.getElementById('userAvatarSidebar');
+                if (nameSide) nameSide.textContent = displayName;
+                if (posSide) posSide.textContent = displayPos;
+                if (avatarSide) avatarSide.textContent = displayName.charAt(0).toUpperCase();
             }
 
-            populateBranchDropdown(rawData);
-            updateDashboard();
+            document.body.classList.add('logged-in');
+            document.getElementById('dashboardContent').classList.remove('hidden');
+            document.body.classList.remove('overflow-hidden');
+            renderTabs();
+            loadData();
+        });
+
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }`;
+        document.head.appendChild(styleSheet);
+
+        function renderTabs() {
+            // Render Desktop Tabs
+            const container = document.getElementById('tabContainer');
+            container.innerHTML = ''; 
+            
+            // Render Mobile Sidebar Tabs
+            const containerMobile = document.getElementById('tabContainerMobile');
+            containerMobile.innerHTML = '';
+
+            jsonFiles.forEach(item => {
+                const isActive = item.id === currentPeriodId;
+                
+                // Desktop Button
+                const btnDesk = document.createElement('button');
+                btnDesk.className = isActive 
+                    ? "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all bg-blue-600 text-white shadow-sm whitespace-nowrap"
+                    : "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap";
+                btnDesk.innerText = item.label.toUpperCase() + " 2026";
+                btnDesk.onclick = () => switchData(item.id);
+                container.appendChild(btnDesk);
+
+                // Mobile Sidebar Button
+                const btnMob = document.createElement('button');
+                btnMob.className = isActive
+                    ? "w-full text-left px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold shadow-sm"
+                    : "w-full text-left px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 font-medium";
+                btnMob.innerHTML = `<i class="fa-regular fa-calendar mr-2"></i> ${item.label.toUpperCase()} 2026`;
+                btnMob.onclick = () => {
+                    switchData(item.id);
+                    toggleSidebar(); // Close sidebar after selection
+                };
+                containerMobile.appendChild(btnMob);
+            });
         }
 
-        function populateBranchDropdown(data) {
-            const select = document.getElementById('branchSelect');
-            select.innerHTML = '<option value="ALL">Semua Cabang (Region Sumatera)</option>';
-            data.forEach(item => {
+        function switchData(newPeriodId) {
+            if (currentPeriodId === newPeriodId) return;
+            
+            const currentSelectedBranch = document.getElementById('branchFilter').value;
+            currentPeriodId = newPeriodId;
+            renderTabs();
+            Object.keys(chartRanks).forEach(k => chartRanks[k] = 'ALL');
+            loadData(currentSelectedBranch);
+        }
+
+        function initFilter() {
+            const select = document.getElementById('branchFilter');
+            const currentVal = select.value; 
+            
+            select.innerHTML = '<option value="ALL">📊 REGION SUMATERA</option>';
+            
+            const sortedBranches = [...rawData].sort((a,b) => a.name.localeCompare(b.name));
+            sortedBranches.forEach(b => {
                 const opt = document.createElement('option');
-                opt.value = item.name;
-                opt.textContent = item.name;
+                opt.value = b.name;
+                opt.textContent = b.name;
                 select.appendChild(opt);
             });
-            select.value = currentMode;
+
+            const newSelect = select.cloneNode(true);
+            select.parentNode.replaceChild(newSelect, select);
+            
+            newSelect.addEventListener('change', (e) => {
+                Object.keys(chartRanks).forEach(k => chartRanks[k] = 'ALL');
+                updateDashboard(e.target.value);
+            });
+            
+            if(currentVal) newSelect.value = currentVal;
         }
 
-        function handlePeriodChange(val) {
-            loadPeriodData(val);
+        function setChartRank(chartId, rank) {
+            if (currentMode !== 'ALL') return;
+            chartRanks[chartId] = rank;
+            updateRankButtons(chartId);
+            renderSingleChart(chartId, rawData);
         }
 
-        function handleBranchChange(val) {
-            currentMode = val;
-            updateDashboard();
+        function updateRankButtons(chartId) {
+            const container = document.getElementById(`ctrl-${chartId}`);
+            if (!container) return;
+            const buttons = container.querySelectorAll('button');
+            const currentRank = chartRanks[chartId];
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (currentRank === 'ALL' && btn.innerText.includes('All')) btn.classList.add('active');
+                else if (currentRank === 'TOP' && btn.innerText.includes('Top')) btn.classList.add('active');
+                else if (currentRank === 'BOTTOM' && btn.innerText.includes('Bot')) btn.classList.add('active');
+            });
         }
 
-        function updateDashboard() {
-            const filteredData = currentMode === 'ALL' 
-                ? rawData 
-                : rawData.filter(d => d.name === currentMode);
-
-            updateHeaderInfo();
-            updateCards(filteredData);
-            updateCharts(filteredData);
+        function getRankedData(data, chartId) {
+            const rank = chartRanks[chartId];
+            let sorted = [...data];
+            switch(chartId) {
+                case 'pbt': sorted.sort((a,b) => b.pbt - a.pbt); break;
+                case 'asset': sorted.sort((a,b) => b.asset - a.asset); break;
+                case 'casa': sorted.sort((a,b) => b.actCasa - a.actCasa); break;
+                case 'fdr': sorted.sort((a,b) => b.actFinancing - a.actFinancing); break;
+                case 'fbi': sorted.sort((a,b) => b.fbi - a.fbi); break;
+            }
+            if (rank === 'ALL') return sorted;
+            else if (rank === 'BOTTOM') return sorted.slice(-10);
+            else return sorted.slice(0, 10);
         }
 
-        function updateHeaderInfo() {
-            const periodConfig = jsonFiles.find(f => f.id === currentPeriodId);
-            const titleEl = document.getElementById('dashboardTitle');
-            const asOfEl = document.getElementById('asOfDateText');
+        function updateDashboard(filterValue) {
+            currentMode = filterValue; 
+            const isAggregate = filterValue === 'ALL';
+            
+            ['pbt', 'asset', 'casa', 'fdr', 'fbi'].forEach(id => {
+                const el = document.getElementById(`ctrl-${id}`);
+                if(isAggregate) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
 
-            if (currentMode === 'ALL') {
-                titleEl.innerText = "RINGKASAN KINERJA REGION SUMATERA";
-                asOfEl.innerText = periodConfig ? `Posisi Data Per: ${periodConfig.asOf}` : '';
+            document.getElementById('tableSection').classList.toggle('hidden', !isAggregate);
+
+            const chartsGrid = document.getElementById('chartsGrid');
+            const wrappers = document.querySelectorAll('.chart-wrapper');
+
+            if (isAggregate) {
+                chartsGrid.className = "grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 transition-all duration-300";
+                wrappers.forEach(w => w.classList.remove('compact'));
+                
+                Object.keys(chartRanks).forEach(key => {
+                    chartRanks[key] = 'ALL';
+                    updateRankButtons(key);
+                });
             } else {
-                titleEl.innerText = `KINERJA CABANG - ${currentMode.toUpperCase()}`;
-                asOfEl.innerText = periodConfig ? `Posisi Data Per: ${periodConfig.asOf}` : '';
+                chartsGrid.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-6 transition-all duration-300";
+                wrappers.forEach(w => w.classList.add('compact'));
+            }
+ 
+            if (isAggregate) {
+                updateCards(rawData); 
+                renderAllCharts(rawData);
+                updateTable(rawData);
+            } else {
+                const singleData = rawData.filter(d => d.name === filterValue);
+                updateCards(singleData);
+                setTimeout(() => renderAllCharts(singleData), 50);
+                updateTable(singleData);
             }
         }
 
         function updateCards(data) {
-            const fmt = (n) => new Intl.NumberFormat('id-ID').format(Math.round(n));
-
-            let pbt = 0, tgtPbt = 0, asset = 0, tgtAsset = 0;
-            let casaSum = 0, cofSum = 0, fbi = 0, tgtFbi = 0;
-            let actFunding = 0, actFinancing = 0;
-
-            if (data.length > 0) {
-                pbt = data.reduce((a,b) => a + b.pbt, 0);
-                tgtPbt = data.reduce((a,b) => a + b.tgtPbt, 0);
-                asset = data.reduce((a,b) => a + b.asset, 0);
-                tgtAsset = data.reduce((a,b) => a + b.tgtAsset, 0);
-                casaSum = data.reduce((a,b) => a + b.casaPct, 0) / data.length;
-                cofSum = data.reduce((a,b) => a + b.cof, 0) / data.length;
-                fbi = data.reduce((a,b) => a + b.fbi, 0);
-                tgtFbi = data.reduce((a,b) => a + b.tgtFbi, 0);
-                actFunding = data.reduce((a,b) => a + b.actFunding, 0);
-                actFinancing = data.reduce((a,b) => a + b.actFinancing, 0);
-            }
-
-            const gapPbt = pbt - tgtPbt;
-            const gapAsset = asset - tgtAsset;
-            const gapFbi = fbi - tgtFbi;
-            const fdrPct = actFunding > 0 ? (actFinancing / actFunding * 100) : 0;
-
-            // Update UI Cards
-            document.getElementById('cardPbtValue').innerText = `Rp ${fmt(pbt)} jt`;
-            document.getElementById('cardPbtTgt').innerText = `Rp ${fmt(tgtPbt)} jt`;
-            document.getElementById('cardPbtGap').innerHTML = gapPbt >= 0 
-                ? `<span class="text-emerald-600">+${fmt(gapPbt)}</span>` 
-                : `<span class="text-red-500">${fmt(gapPbt)}</span>`;
-
-            document.getElementById('cardAssetValue').innerText = `Rp ${fmt(asset)} jt`;
-            document.getElementById('cardAssetTgt').innerText = `Rp ${fmt(tgtAsset)} jt`;
-            document.getElementById('cardAssetGap').innerHTML = gapAsset >= 0 
-                ? `<span class="text-emerald-600">+${fmt(gapAsset)}</span>` 
-                : `<span class="text-red-500">${fmt(gapAsset)}</span>`;
-
-            document.getElementById('cardCasaValue').innerText = `${casaSum.toFixed(1)}%`;
-            document.getElementById('cardCasaStatus').innerHTML = casaSum >= 60 
-                ? `<span class="text-emerald-600"><i class="fa-solid fa-check"></i> OK</span>` 
-                : `<span class="text-amber-500"><i class="fa-solid fa-triangle-exclamation"></i> Low</span>`;
-
-            document.getElementById('cardCofValue').innerText = `${cofSum.toFixed(2)}%`;
-            document.getElementById('cardCofStatus').innerHTML = cofSum <= 2.3 
-                ? `<span class="text-emerald-600"><i class="fa-solid fa-check"></i> Safe</span>` 
-                : `<span class="text-red-500"><i class="fa-solid fa-circle-exclamation"></i> High</span>`;
-
-            document.getElementById('cardFdrValue').innerText = `${fdrPct.toFixed(1)}%`;
-            document.getElementById('cardFdrStatus').innerHTML = fdrPct >= 30 
-                ? `<span class="text-emerald-600"><i class="fa-solid fa-check"></i> Ideal</span>` 
-                : `<span class="text-amber-500"><i class="fa-solid fa-circle-exclamation"></i> Low</span>`;
-
-            document.getElementById('cardFbiValue').innerText = `Rp ${fmt(fbi)} jt`;
-            document.getElementById('cardFbiTgt').innerText = `Rp ${fmt(tgtFbi)} jt`;
-            document.getElementById('cardFbiGap').innerHTML = gapFbi >= 0 
-                ? `<span class="text-emerald-600">+${fmt(gapFbi)}</span>` 
-                : `<span class="text-red-500">${fmt(gapFbi)}</span>`;
-
-            // Update Executive Summary Section
-            updateExecutiveSummary(data);
-        }
-
-        function updateExecutiveSummary(data) {
+            const fmt = (n) => new Intl.NumberFormat('id-ID').format(n);
             const isAggregate = currentMode === 'ALL';
-            const config = jsonFiles.find(f => f.id === currentPeriodId);
-            const periodLabel = config ? config.label.toUpperCase() : "2026";
             
-            document.getElementById('summaryPeriodBadge').innerText = `PERIODE: ${periodLabel} ${isAggregate ? '(REGION SUMATERA)' : '(' + currentMode + ')'}`;
+            const totalPBT = data.reduce((a,b) => a + b.pbt, 0);
+            const totalTgtPBT = data.reduce((a,b) => a + b.tgtPbt, 0);
+            const totalGapPBT = totalPBT - totalTgtPBT;
+            const totalAsset = data.reduce((a,b) => a + b.asset, 0);
+            const totalTgtAsset = data.reduce((a,b) => a + b.tgtAsset, 0);
+            const totalGapAsset = data.reduce((a,b) => a + b.gapAsset, 0);
+            const avgCASA = data.length > 0 ? (data.reduce((a,b) => a + b.casaPct, 0) / data.length).toFixed(1) : "0.0";
+            const avgCOF = data.length > 0 ? (data.reduce((a,b) => a + b.cof, 0) / data.length).toFixed(2) : "0.00";
+            const totalActCasa = data.reduce((a,b) => a + b.actCasa, 0);
+            const totalGapCasa = data.reduce((a,b) => a + b.gapCasa, 0);
+            const totalActFunding = data.reduce((a,b) => a + b.actFunding, 0);
+            const totalActFinancing = data.reduce((a,b) => a + b.actFinancing, 0);
+            const totalGapFinancing = data.reduce((a,b) => a + b.gapFinancing, 0);
+            const calcFDR = totalActFunding > 0 ? ((totalActFinancing / totalActFunding) * 100).toFixed(1) : "0.0";
+            const totalFBI = data.reduce((a,b) => a + b.fbi, 0);
+            const totalTgtFBI = data.reduce((a,b) => a + b.tgtFbi, 0);
+            const totalGapFBI = data.reduce((a,b) => a + b.gapFbi, 0);
 
-            const fmt = (n) => new Intl.NumberFormat('id-ID').format(Math.round(n));
+            document.getElementById('sumPBT').innerText = fmt(totalPBT);
+            document.getElementById('targetPBT').innerText = fmt(totalTgtPBT);
+            const gapPBTEl = document.getElementById('gapPBT');
+            gapPBTEl.innerText = fmt(totalGapPBT);
+            gapPBTEl.className = `font-bold ${totalGapPBT < 0 ? 'text-red-500' : 'text-green-600'}`;
+            
+            document.getElementById('sumAsset').innerText = fmt(totalAsset);
+            document.getElementById('targetAsset').innerText = fmt(totalTgtAsset);
+            const gapAssetEl = document.getElementById('gapAsset');
+            gapAssetEl.innerText = fmt(totalGapAsset);
+            gapAssetEl.className = `font-bold ${totalGapAsset < 0 ? 'text-red-500' : 'text-green-600'}`;
 
-            if (isAggregate) {
-                const totalPBT = data.reduce((a,b) => a + b.pbt, 0);
-                const totalTgtPBT = data.reduce((a,b) => a + b.tgtPbt, 0);
-                const totalGapPBT = totalPBT - totalTgtPBT;
-                
-                const totalAsset = data.reduce((a,b) => a + b.asset, 0);
-                const totalTgtAsset = data.reduce((a,b) => a + b.tgtAsset, 0);
-                
-                const totalActFunding = data.reduce((a,b) => a + b.actFunding, 0);
-                const totalActFinancing = data.reduce((a,b) => a + b.actFinancing, 0);
-                const calcFDR = totalActFunding > 0 ? (totalActFinancing / totalActFunding * 100).toFixed(1) : "0.0";
-                
-                const avgCASA = data.length > 0 ? (data.reduce((a,b) => a + b.casaPct, 0) / data.length).toFixed(1) : "0.0";
-                const avgCOF = data.length > 0 ? (data.reduce((a,b) => a + b.cof, 0) / data.length).toFixed(2) : "0.00";
-                
-                const totalFBI = data.reduce((a,b) => a + b.fbi, 0);
-                const totalTgtFBI = data.reduce((a,b) => a + b.tgtFbi, 0);
-
-                const countPpapIssue = data.filter(d => d.ppap > 1).length;
-
-                // Status Kesehatan Bisnis (3 Poin Utama)
-                document.getElementById('healthStatusList').innerHTML = `
-                    <li><strong class="text-red-600">Defisit Profitabilitas & Target PBT:</strong> Total PBT regional terealisasi Rp ${fmt(totalPBT)} juta (mengalami gap rugi Rp ${fmt(totalGapPBT)} juta dari target Rp ${fmt(totalTgtPBT)} juta).</li>
-                    <li><strong class="text-amber-600">Likuiditas Melimpah Namun Terabaikan (FDR Rendah):</strong> Penyerapan pembiayaan sangat rendah dengan rata-rata FDR ${calcFDR}% (jauh di bawah batas sehat 30%), menciptakan ekspansi dana mengendap (Cost of Funds).</li>
-                    <li><strong class="text-amber-600">Struktur DPK Relatif Baik, Namun FBI Ketinggalan:</strong> CASA Ratio terjaga di angka ${avgCASA}% dan COF aman di ${avgCOF}%, tetapi Fee Based Income (FBI) mengalami defisit dibanding target (Rp ${fmt(totalFBI)} vs Rp ${fmt(totalTgtFBI)} juta).</li>
-                `;
-
-                // 1. Analisis Kinerja & Tren
-                document.getElementById('summaryPerformance').innerHTML = `
-                    <p>• <strong class="text-emerald-600">CASA & COF (Aman):</strong> Proporsi CASA rata-rata ${avgCASA}% memenuhi ambang minimum (&ge;60%) dengan Cost of Fund terdistribusi efisien di ${avgCOF}% (target &le;2.3%).</p>
-                    <p>• <strong class="text-red-600">PBT & FBI (Meleset):</strong> PBT minus signifikan (Gap: Rp ${fmt(totalGapPBT)} jt) dipicu rendahnya pendapatan margin operasional dan pencapaian FBI yang belum optimal.</p>
-                    <p>• <strong class="text-amber-600">Anomali FDR & Risiko PPAP:</strong> FDR berada pada tingkat kritis ${calcFDR}%. Selain itu, terdapat ${countPpapIssue} cabang dengan indikator PPAP/YTD >1% yang perlu diawasi ketat.</p>
-                `;
-
-                // 2. Root Cause
-                document.getElementById('summaryRootCause').innerHTML = `
-                    <p>• <strong>Low Earning Assets Yield:</strong> DPK berhasil dihimpun (Asset Rp ${fmt(totalAsset)} jt) namun tidak tersalurkan optimal ke penyaluran pembiayaan produktif (Financing rendah), sehingga yield portofolio tergerus.</p>
-                    <p>• <strong>Cost of Funds Lag:</strong> Kendati COF tergolong rendah, akumulasi dana mengendap tanpa penyaluran ekspansif menghasilkan <em>negative carry</em> yang menggerus PBT regional.</p>
-                    <p>• <strong>Fee Income Concentration:</strong> Transaksi berbasis layanan non-pembiayaan belum dimaksimalkan oleh mayoritas cabang jaringan Sumatera.</p>
-                `;
-
-                // 3. Action Plan
-                document.getElementById('summaryActionPlan').innerHTML = `
-                    <p>1. <strong class="text-slate-800">Akselerasi Pembiayaan Berkualitas (Boost FDR):</strong> Fokuskan penyaluran kredit pada segmen komersial/ritel berisiko terukur di unit/cabang dengan FDR di bawah 20% untuk menaikkan yield aset.</p>
-                    <p>2. <strong class="text-slate-800">Inisiatif FBI & Digital Banking:</strong> Mandat penetrasi produk transaksi, kewirausahaan, dan bancassurance pada cabang utama guna mengejar gap target FBI.</p>
-                    <p>3. <strong class="text-slate-800">Restrukturisasi & Pengetatan PPAP:</strong> Lakukan program <em>remedial & recovery</em> khusus pada cabang-cabang dengan rasio PPAP/YTD >1% untuk menekan pembentukan cadangan kerugian.</p>
-                `;
+            document.getElementById('avgCASA').innerText = avgCASA + '%';
+            document.getElementById('actCasaAmt').innerText = fmt(totalActCasa);
+            const gapCasaEl = document.getElementById('gapCasaAmt');
+            gapCasaEl.innerText = fmt(totalGapCasa);
+            gapCasaEl.className = `font-bold ${totalGapCasa < 0 ? 'text-red-500' : 'text-green-600'}`;
+            
+            document.getElementById('avgCOF').innerText = avgCOF + '%';
+            const cofInd = document.getElementById('cofIndicator');
+            if(parseFloat(avgCOF) <= 2.30) {
+                cofInd.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
+                document.getElementById('avgCOF').className = "text-xs sm:text-sm font-extrabold text-green-700";
             } else {
-                // Tampilan Summary Spesifik 1 Cabang
+                cofInd.innerHTML = '<i class="fa-solid fa-circle-exclamation text-orange-500"></i>';
+                document.getElementById('avgCOF').className = "text-xs sm:text-sm font-extrabold text-orange-600";
+            }
+
+            document.getElementById('avgFDR').innerText = calcFDR + '%';
+            document.getElementById('actFinancing').innerText = fmt(totalActFinancing);
+            const gapFinEl = document.getElementById('gapFinancing');
+            gapFinEl.innerText = fmt(totalGapFinancing);
+            gapFinEl.className = `font-bold ${totalGapFinancing < 0 ? 'text-red-500' : 'text-green-600'}`;
+
+            document.getElementById('sumFBI').innerText = fmt(totalFBI);
+            document.getElementById('targetFBI').innerText = fmt(totalTgtFBI);
+            const gapFBIEl = document.getElementById('gapFBI');
+            gapFBIEl.innerText = fmt(totalGapFBI);
+            gapFBIEl.className = `font-bold ${totalGapFBI < 0 ? 'text-red-500' : 'text-green-600'}`;
+
+            const countIds = ['countPBT', 'countAsset', 'countCASA', 'countFDR', 'countFBI', 'countPPAP'];
+            countIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(isAggregate) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            });
+
+            const posNegContainer = document.getElementById('countPbtPosNeg');
+            if(isAggregate) {
+                posNegContainer.classList.remove('hidden');
+                const cntPos = data.filter(d => d.pbt > 0).length;
+                const cntNeg = data.filter(d => d.pbt < 0).length;
+                document.getElementById('cntPbtPos').innerText = cntPos;
+                document.getElementById('cntPbtNeg').innerText = cntNeg;
+
+                const pbtOk = data.filter(d => d.pbt >= d.tgtPbt).length;
+                document.getElementById('cntPbtOk').innerText = pbtOk;
+                document.getElementById('cntPbtNo').innerText = data.length - pbtOk;
+                document.getElementById('iconPBT').innerHTML = totalPBT >= totalTgtPBT ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+
+                const assetOk = data.filter(d => d.asset >= d.tgtAsset).length;
+                document.getElementById('cntAssetOk').innerText = assetOk;
+                document.getElementById('cntAssetNo').innerText = data.length - assetOk;
+                document.getElementById('iconAsset').innerHTML = totalAsset >= totalTgtAsset ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+
+                const casaOk = data.filter(d => d.casaPct >= 60).length;
+                document.getElementById('cntCasaOk').innerText = casaOk;
+                document.getElementById('cntCasaNo').innerText = data.length - casaOk;
+                
+                const cofOk = data.filter(d => d.cof <= 2.30).length;
+                document.getElementById('cntCofOk').innerText = cofOk;
+                document.getElementById('cntCofNo').innerText = data.length - cofOk;
+                
+                document.getElementById('iconCASA').innerHTML = parseFloat(avgCASA) >= 60 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-orange-400"></i>';
+                document.getElementById('casaIndicator').innerHTML = document.getElementById('iconCASA').innerHTML;
+
+                const fdrOk = data.filter(d => d.fdrPct >= 30).length;
+                document.getElementById('cntFdrOk').innerText = fdrOk;
+                document.getElementById('cntFdrNo').innerText = data.length - fdrOk;
+                document.getElementById('iconFDR').innerHTML = parseFloat(calcFDR) >= 30 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-orange-500"></i>';
+
+                const fbiOk = data.filter(d => d.fbi >= d.tgtFbi).length;
+                document.getElementById('cntFbiOk').innerText = fbiOk;
+                document.getElementById('cntFbiNo').innerText = data.length - fbiOk;
+                document.getElementById('iconFBI').innerHTML = totalFBI >= totalTgtFBI ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+
+                const ppapOk = data.filter(d => d.ppap <= 1).length;
+                document.getElementById('cntPpapOk').innerText = ppapOk;
+                document.getElementById('cntPpapNo').innerText = data.length - ppapOk;
+                
+                const highRisk = data.length - ppapOk;
+                document.getElementById('valPPAP').innerText = highRisk + " Branches";
+                document.getElementById('statusPPAP').innerText = `of ${data.length} branches have issues`;
+                document.getElementById('statusPPAP').className = "text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-600 block text-center";
+                document.getElementById('iconPPAP').innerHTML = highRisk === 0 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+
+            } else {
+                posNegContainer.classList.add('hidden');
                 const d = data[0] || {};
-                const gapPBT = d.pbt - d.tgtPbt;
+                document.getElementById('iconPBT').innerHTML = d.pbt >= d.tgtPbt ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+                document.getElementById('iconAsset').innerHTML = d.asset >= d.tgtAsset ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
+                
+                const casaStatus = d.casaPct >= 60;
+                document.getElementById('iconCASA').innerHTML = casaStatus ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-orange-400"></i>';
+                document.getElementById('casaIndicator').innerHTML = document.getElementById('iconCASA').innerHTML;
 
-                document.getElementById('healthStatusList').innerHTML = `
-                    <li><strong>Status PBT Cabang:</strong> Terdeteksi Rp ${fmt(d.pbt)} jt (Gap Target: Rp ${fmt(gapPBT)} jt).</li>
-                    <li><strong>Rasio CASA & COF:</strong> CASA Ratio ${d.casaPct}% | COF ${d.cof}%.</li>
-                    <li><strong>Kinerja Penyaluran (FDR) & Risiko:</strong> FDR ${d.fdrPct}% | Rasio PPAP ${d.ppap}%.</li>
-                `;
+                document.getElementById('iconFDR').innerHTML = d.fdrPct >= 30 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-orange-500"></i>';
+                document.getElementById('iconFBI').innerHTML = d.fbi >= d.tgtFbi ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
 
-                document.getElementById('summaryPerformance').innerHTML = `
-                    <p>• <strong>PBT:</strong> Rp ${fmt(d.pbt)} jt (Target: Rp ${fmt(d.tgtPbt)} jt).</p>
-                    <p>• <strong>CASA / COF:</strong> CASA ${d.casaPct}% / COF ${d.cof}%.</p>
-                    <p>• <strong>FBI:</strong> Rp ${fmt(d.fbi)} jt (Gap: Rp ${fmt(d.pbt - d.tgtPbt)} jt).</p>
-                `;
-
-                document.getElementById('summaryRootCause').innerHTML = `
-                    <p>• Efisiensi operasional dan struktur pembiayaan lokal mempengaruhi capaian PBT dan FBI unit ${d.name}.</p>
-                    <p>• Rasio FDR ${d.fdrPct}% menunjukkan tingkat optimalisasi penyaluran dana cabang setempat.</p>
-                `;
-
-                document.getElementById('summaryActionPlan').innerHTML = `
-                    <p>1. Tingkatkan aktivitas penyaluran pembiayaan sehat di wilayah operasional ${d.name}.</p>
-                    <p>2. Dorong pencapaian target Fee Based Income melalui produk jasa dan transaksi harian.</p>
-                    <p>3. Kendalikan kualitas aset untuk menjaga rasio PPAP tetap aman (&le;1%).</p>
-                `;
+                document.getElementById('valPPAP').innerText = (d.ppap || 0) + '%';
+                if(d.ppap > 1) {
+                    document.getElementById('statusPPAP').innerText = "WASPADA (>1%)";
+                    document.getElementById('statusPPAP').className = "text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-700 block text-center";
+                    document.getElementById('iconPPAP').innerHTML = '<i class="fa-solid fa-circle-exclamation text-red-500"></i>';
+                } else {
+                    document.getElementById('statusPPAP').innerText = "AMAN (<1%)";
+                    document.getElementById('statusPPAP').className = "text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-green-100 text-green-700 block text-center";
+                    document.getElementById('iconPPAP').innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i>';
+                }
             }
         }
 
-        function updateCharts(data) {
+        function updateTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            const fmt = (n) => new Intl.NumberFormat('id-ID').format(n);
+            let tableData = [...data];
+            if (currentMode === 'ALL') tableData.sort((a,b) => b.pbt - a.pbt);
+
+            tableData.forEach(d => {
+                const row = `
+                    <tr class="hover:bg-blue-50 transition-colors border-b border-gray-50">
+                        <td class="p-2 sm:p-3 font-medium sticky left-0 bg-white hover:bg-blue-50 text-slate-700 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">${d.name}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.pbt < 0 ? 'text-red-500 font-medium' : 'text-green-600 font-bold'}">${fmt(d.pbt)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.pbt - d.tgtPbt < 0 ? 'text-red-500' : 'text-green-600'} font-medium">${fmt(d.pbt - d.tgtPbt)}</td>
+                        <td class="p-2 sm:p-3 text-right text-slate-700 font-medium">${fmt(d.asset)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.gapAsset < 0 ? 'text-red-500 font-medium' : 'text-green-600 font-bold'}">${fmt(d.gapAsset)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.casaPct < 60 ? 'text-red-500 font-bold' : 'text-green-600 font-bold'}">${d.casaPct}%</td>
+                        <td class="p-2 sm:p-3 text-right text-slate-700 font-medium">${fmt(d.actCasa)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.gapCasa < 0 ? 'text-red-500 font-medium' : 'text-green-600 font-bold'}">${fmt(d.gapCasa)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.cof > 2.30 ? 'text-red-600 font-medium' : 'text-green-600 font-bold'}">${d.cof.toFixed(2)}%</td>
+                        <td class="p-2 sm:p-3 text-right ${d.fdrPct < 30 ? 'text-red-500 font-bold' : 'text-green-600 font-bold'}">${d.fdrPct}%</td>
+                        <td class="p-2 sm:p-3 text-right text-slate-700 font-medium">${fmt(d.actFinancing)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.gapFinancing < 0 ? 'text-red-500' : 'text-green-600'} font-bold">${fmt(d.gapFinancing)}</td>
+                        <td class="p-2 sm:p-3 text-right text-slate-700 font-medium">${fmt(d.fbi)}</td>
+                        <td class="p-2 sm:p-3 text-right ${d.gapFbi < 0 ? 'text-red-500 font-medium' : 'text-green-600 font-bold'}">${fmt(d.gapFbi)}</td>
+                        <td class="p-2 sm:p-3 text-center"><span class="${d.ppap > 1 ? 'bg-red-100 text-red-700 font-medium' : 'bg-green-50 text-green-700 font-bold'} px-1.5 py-0.5 rounded text-[10px] sm:text-[12px]">${d.ppap}%</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        const smartLabelsPlugin = {
+            id: 'smartLabels',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                const isSingle = currentMode !== 'ALL';
+                const dataCount = chart.data.labels.length;
+                const isAggregateFiltered = (currentMode === 'ALL' && dataCount <= 10);
+                const isCompactAggregate = (currentMode === 'ALL' && dataCount > 10);
+                if (isCompactAggregate) return; 
+
+                ctx.save();
+                ctx.font = isSingle ? 'bold 11px sans-serif' : (isAggregateFiltered ? 'bold 9px sans-serif' : 'bold 8px sans-serif');
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    if (!meta.hidden) {
+                        meta.data.forEach((element, index) => {
+                            const value = dataset.data[index];
+                            if (value !== null && value !== undefined) {
+                                let label = value;
+                                let displayValue = value;
+
+                                if ((isSingle || isAggregateFiltered) && dataset.label && dataset.label.toUpperCase().includes('GAP')) {
+                                    displayValue = Math.abs(value);
+                                }
+
+                                if (typeof displayValue === 'number') {
+                                    if (isSingle) {
+                                        label = new Intl.NumberFormat('id-ID').format(displayValue);
+                                    } else if (isAggregateFiltered) {
+                                        if (Math.abs(displayValue) >= 1000) {
+                                            const val = displayValue / 1000;
+                                            label = (val % 1 === 0 ? val : val.toFixed(1)) + 'K';
+                                        } else {
+                                            label = new Intl.NumberFormat('id-ID').format(displayValue);
+                                        }
+                                    } else {
+                                        if (Math.abs(displayValue) >= 1000) {
+                                            label = new Intl.NumberFormat('id-ID', { notation: "compact", compactDisplay: "short", maximumFractionDigits: 1 }).format(displayValue);
+                                        } else {
+                                            label = new Intl.NumberFormat('id-ID').format(displayValue);
+                                        }
+                                    }
+                                    if (dataset.label && (dataset.label.includes('%') || dataset.yAxisID === 'y1')) {
+                                        label = displayValue + '%';
+                                    }
+                                }
+
+                                let xPos = element.x;
+                                let yPos = element.y;
+                                if (dataset.type === 'line') yPos = element.y - 10;
+                                else {
+                                    const yTop = element.y;
+                                    const yBottom = element.base;
+                                    yPos = (yTop + yBottom) / 2;
+                                }
+
+                                if (isSingle || isAggregateFiltered) {
+                                    ctx.lineJoin = 'round';
+                                    ctx.lineWidth = 3;
+                                    ctx.strokeStyle = '#FFFFFF';
+                                    ctx.strokeText(label, xPos, yPos);
+                                    ctx.fillStyle = '#000000';
+                                    ctx.fillText(label, xPos, yPos);
+                                } else {
+                                    ctx.fillStyle = dataset.backgroundColor instanceof Array ? dataset.backgroundColor[index] : dataset.backgroundColor;
+                                    if (dataset.type === 'line') ctx.fillStyle = dataset.borderColor;
+                                    ctx.fillText(label, xPos, yPos);
+                                }
+                            }
+                        });
+                    }
+                });
+                ctx.restore();
+            }
+        };
+
+        function renderAllCharts(fullData) {
+            ['pbt', 'asset', 'casa', 'fdr', 'fbi'].forEach(id => renderSingleChart(id, fullData));
+            updateHeaderSubtitle();
+        }
+
+        function renderSingleChart(chartId, fullData) {
+            const data = currentMode === 'ALL' ? getRankedData(fullData, chartId) : fullData;
             const labels = data.map(d => d.name);
-            const pbtActual = data.map(d => d.pbt);
-            const pbtTarget = data.map(d => d.tgtPbt);
+            const isSingle = currentMode !== 'ALL';
+            const currentRank = chartRanks[chartId];
+            const labelRotation = (currentRank === 'TOP' || currentRank === 'BOTTOM') ? 45 : 90;
+            const isAggregateAll = (currentMode === 'ALL' && data.length > 10);
+            
+            const getLegendColor = (dataset) => {
+                if (dataset.label && dataset.label.toUpperCase().includes('GAP')) return '#ef4444';
+                if (dataset.borderColor) return dataset.borderColor;
+                if (typeof dataset.backgroundColor === 'string') return dataset.backgroundColor;
+                return '#000';
+            };
 
-            const assetActual = data.map(d => d.asset);
-            const assetTarget = data.map(d => d.tgtAsset);
+            const formatYAxis = (value) => {
+                if (Math.abs(value) >= 1000) return (value/1000) + 'k';
+                return value;
+            };
 
-            // Chart 1: PBT Chart
-            if (pbtChartInstance) pbtChartInstance.destroy();
-            const ctx1 = document.getElementById('pbtChart').getContext('2d');
-            pbtChartInstance = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'PBT Realisasi',
-                            data: pbtActual,
-                            backgroundColor: pbtActual.map(v => v >= 0 ? '#2563eb' : '#ef4444'),
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'PBT Target',
-                            data: pbtTarget,
-                            backgroundColor: '#94a3b8',
-                            borderRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
+            const commonOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 400 },
+                layout: { padding: { top: isSingle ? 10 : 20 } },
+                plugins: {
+                    legend: { 
+                        display: true, position: 'top', 
+                        labels: { 
+                            usePointStyle: true, boxWidth: 6, boxHeight: 6, font: {size: 8}, 
+                            generateLabels: (chart) => {
+                                const original = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                return original.filter(label => !label.hidden).map(label => {
+                                    const dataset = chart.data.datasets[label.datasetIndex];
+                                    if (dataset) {
+                                        label.fillStyle = getLegendColor(dataset);
+                                        label.strokeStyle = getLegendColor(dataset);
+                                    }
+                                    return label;
+                                });
+                            }
+                        } 
                     },
-                    scales: {
-                        y: { grid: { borderDash: [2, 4] } }
-                    }
-                }
-            });
-
-            // Chart 2: Asset Chart
-            if (assetChartInstance) assetChartInstance.destroy();
-            const ctx2 = document.getElementById('assetChart').getContext('2d');
-            assetChartInstance = new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Asset Realisasi',
-                            data: assetActual,
-                            backgroundColor: '#10b981',
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Asset Target',
-                            data: assetTarget,
-                            backgroundColor: '#cbd5e1',
-                            borderRadius: 4
-                        }
-                    ]
+                    tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.9)', titleFont: {size: 10}, bodyFont: {size: 10} }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
-                    },
-                    scales: {
-                        y: { grid: { borderDash: [2, 4] } }
-                    }
+                scales: {
+                    x: { display: !isSingle, grid: { display: false }, ticks: { maxRotation: labelRotation, minRotation: labelRotation, font: {size: 7}, autoSkip: false } },
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: {size: 7}, callback: formatYAxis } }
                 }
-            });
+            };
+
+            if(charts[chartId]) charts[chartId].destroy();
+
+            if (chartId === 'pbt') {
+                const datasets = [
+                    { label: 'Actual', data: data.map(d => d.pbt), backgroundColor: data.map(d => d.pbt < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4 },
+                    { label: 'Target', data: data.map(d => d.tgtPbt), backgroundColor: '#94a3b8', borderRadius: 4, hidden: isAggregateAll },
+                    { label: 'GAP', data: data.map(d => d.pbt - d.tgtPbt), backgroundColor: data.map(d => (d.pbt - d.tgtPbt) < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4 }
+                ];
+                charts.pbt = new Chart(document.getElementById('pbtChart'), { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [smartLabelsPlugin] });
+            } 
+            else if (chartId === 'asset') {
+                const datasets = [
+                    { label: 'Actual', data: data.map(d => d.asset), backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'Target', data: data.map(d => d.tgtAsset), backgroundColor: '#94a3b8', borderRadius: 4, hidden: isAggregateAll },
+                    { label: 'GAP', data: data.map(d => d.gapAsset), backgroundColor: data.map(d => d.gapAsset < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4 }
+                ];
+                charts.asset = new Chart(document.getElementById('assetChart'), { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [smartLabelsPlugin] });
+            } 
+            else if (chartId === 'casa') {
+                charts.casa = new Chart(document.getElementById('casaChart'), {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [
+                            { label: 'Actual', data: data.map(d => d.actCasa), backgroundColor: '#10b981', borderRadius: 4, yAxisID: 'y' },
+                            { label: 'GAP', data: data.map(d => d.gapCasa), backgroundColor: data.map(d => d.gapCasa < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4, yAxisID: 'y' },
+                            { label: 'Ratio %', data: data.map(d => d.casaPct), type: 'line', borderColor: '#3b82f6', borderWidth: 2, yAxisID: 'y1', tension: 0.3 }
+                        ]
+                    },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: commonOptions.scales.x,
+                            y: { type: 'linear', position: 'left', ticks: { font: {size: 7}, callback: formatYAxis } },
+                            y1: { type: 'linear', display: !isSingle, position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }, ticks: {font:{size: 7}} }
+                        }
+                    },
+                    plugins: [smartLabelsPlugin]
+                });
+            } 
+            else if (chartId === 'fdr') {
+                charts.fdr = new Chart(document.getElementById('fdrChart'), {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [
+                            { label: 'Financing', data: data.map(d => d.actFinancing), backgroundColor: '#7c3aed', borderRadius: 4, yAxisID: 'y' },
+                            { label: 'FDR %', data: data.map(d => d.fdrPct), type: 'line', borderColor: '#f59e0b', backgroundColor: '#f59e0b', borderWidth: 2, pointRadius: isSingle ? 4 : 2, pointBackgroundColor: '#fff', yAxisID: 'y1', tension: 0.3 },
+                            { label: 'GAP Fin', data: data.map(d => d.gapFinancing), backgroundColor: data.map(d => d.gapFinancing < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4, yAxisID: 'y' }
+                        ]
+                    },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: commonOptions.scales.x,
+                            y: { type: 'linear', position: 'left', title: { display: false }, ticks: { font: {size: 7}, callback: formatYAxis } },
+                            y1: { type: 'linear', position: 'right', min: 0, max: 100, title: { display: false }, grid: { drawOnChartArea: false }, ticks: { callback: v => v + '%', font:{size: 7} } }
+                        }
+                    },
+                    plugins: [smartLabelsPlugin]
+                });
+            } 
+            else if (chartId === 'fbi') {
+                const datasets = [
+                    { label: 'Actual', data: data.map(d => d.fbi), backgroundColor: '#f59e0b', borderRadius: 4 },
+                    { label: 'Target', data: data.map(d => d.tgtFbi), backgroundColor: '#cbd5e1', borderRadius: 4, hidden: isAggregateAll },
+                    { label: 'GAP', data: data.map(d => d.gapFbi), backgroundColor: data.map(d => d.gapFbi < 0 ? '#ef4444' : '#22c55e'), borderRadius: 4 }
+                ];
+                charts.fbi = new Chart(document.getElementById('fbiChart'), { type: 'bar', data: { labels, datasets }, options: commonOptions, plugins: [smartLabelsPlugin] });
+            }
+        }
+
+        function updateHeaderTitle() {
+            const titleEl = document.getElementById('headerTitle');
+            const config = jsonFiles.find(f => f.id === currentPeriodId);
+            const monthName = config ? config.label.toUpperCase() : 'DATA';
+            titleEl.innerText = `CONTRIBUTION MARGIN\n[${monthName} 2026]`;
+        }
+
+        function updateHeaderSubtitle() {
+            const brVal = document.getElementById('branchFilter').value;
+            const subtitleEl = document.getElementById('headerSubtitle');
+            if (subtitleEl) {
+                if (brVal=='ALL') subtitleEl.innerText = "REGION SUMATERA";
+                else subtitleEl.innerText = brVal;
+            }
         }
     </script>
 </body>
 </html>
-
-```
