@@ -613,13 +613,25 @@
                 var displayName = user.nama || 'User';
                 var displayPos = user.posisi || '-';
 
+                // Fungsi untuk mengambil 2 huruf inisial dari nama
+                function getInitials(name) {
+                    if (!name) return 'U';
+                    var parts = name.trim().split(/\s+/);
+                    if (parts.length >= 2) {
+                        return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+                    }
+                    return parts[0].substring(0, 2).toUpperCase();
+                }
+
+                var initials = getInitials(displayName);
+
                 // Update Desktop Header Chips
                 var nameEl = document.getElementById('userNameChip');
                 var posEl = document.getElementById('userPosChip');
                 var avatarEl = document.getElementById('userAvatarCircle');
                 if (nameEl) nameEl.textContent = displayName;
                 if (posEl) posEl.textContent = displayPos;
-                if (avatarEl) avatarEl.textContent = displayName.charAt(0).toUpperCase();
+                if (avatarEl) avatarEl.textContent = initials;
 
                 // Update Sidebar User Info
                 var nameSide = document.getElementById('userNameSidebar');
@@ -627,7 +639,7 @@
                 var avatarSide = document.getElementById('userAvatarSidebar');
                 if (nameSide) nameSide.textContent = displayName;
                 if (posSide) posSide.textContent = displayPos;
-                if (avatarSide) avatarSide.textContent = displayName.charAt(0).toUpperCase();
+                if (avatarSide) avatarSide.textContent = initials;
             }
 
             document.body.classList.add('logged-in');
