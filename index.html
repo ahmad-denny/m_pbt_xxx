@@ -102,6 +102,7 @@
         <div class="p-4 space-y-6">
             <!-- User Info Section -->
             <div class="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                <p class="text-xs text-slate-400 uppercase mb-2">Logged in as</p>
                 <div class="flex items-center gap-3">
                     <div id="userAvatarSidebar" class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-sm font-bold text-white shrink-0">U</div>
                     <div class="leading-tight">
@@ -181,21 +182,22 @@
     <!-- ============================================ -->
 
     <div id="dashboardContent" class="hidden">
-        <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <!-- HEADER / NAVBAR PUTIH -->
+        <nav class="bg-white text-slate-800 shadow-sm border-b border-gray-200 sticky top-0 z-50">
             <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
                 
                 <!-- Header Top Row: Logo, Title, and Mobile Menu Button -->
                 <div class="flex items-center justify-between w-full md:w-auto">
                     <div class="flex items-center space-x-3">
                         <!-- Hamburger Menu Button (Mobile Only) -->
-                        <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-1 mr-2">
+                        <button onclick="toggleSidebar()" class="md:hidden text-slate-700 hover:text-slate-900 p-1 mr-2 transition-colors">
                             <i class="fa-solid fa-bars text-xl"></i>
                         </button>
 
-                        <div class="bg-white-600 p-1 rounded-lg shrink-0"><img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="32" height="32"></div>
+                        <div class="bg-slate-100 p-1 rounded-lg shrink-0 border border-slate-200"><img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo" width="32" height="32"></div>
                         <div>
-                            <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight" id="headerTitle">CONTRIBUTION MARGIN <br>[JUNI 2026]</h1>
-                            <p class="text-[10px] sm:text-xs text-slate-400 sm:block">PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP</p>
+                            <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight text-slate-900" id="headerTitle">CONTRIBUTION MARGIN <br>[JUNI 2026]</h1>
+                            <p class="text-[10px] sm:text-xs text-slate-500 sm:block">PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP</p>
                         </div>
                     </div>
                 </div>            
@@ -204,22 +206,21 @@
                 <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-between">
                     
                     <!-- Desktop Tabs (Hidden on Mobile, moved to Sidebar) -->
-                    <div id="tabContainer" class="hidden md:flex bg-slate-800 rounded-lg p-1 border border-slate-700 overflow-x-auto max-w-full">
+                    <div id="tabContainer" class="hidden md:flex bg-slate-100 rounded-lg p-1 border border-slate-200 overflow-x-auto max-w-full">
                         <!-- Tabs injected by JS -->
                     </div>
-                    <!-- Branch Filter (Stays below title/controls as requested) -->
-                    <div class="flex items-center justify-end bg-slate-800 rounded-lg p-1 border border-slate-700 flex-1 sm:flex-none w-full md:w-auto">
-                        <select id="branchFilter" class="bg-slate-900 text-white text-xs sm:text-sm rounded-md border-none focus:ring-2 focus:ring-blue-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px]">
+                    <!-- Branch Filter -->
+                    <div class="flex items-center justify-end bg-slate-100 rounded-lg p-1 border border-slate-200 flex-1 sm:flex-none w-full md:w-auto">
+                        <select id="branchFilter" class="bg-white text-slate-800 text-xs sm:text-sm rounded-md border border-slate-300 focus:ring-2 focus:ring-blue-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px] shadow-2xs font-medium">
                             <option value="ALL">📊 REGION SUMATERA</option>
                         </select>
                     </div>
                     <!-- Desktop User Info Chip (Hidden on Mobile) -->
-                    
-                    <div id="userInfoChip" class="hidden md:flex items-center gap-2 pl-3 ml-1 border-1 border-slate-700">                    
-                        <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">U</div>
+                    <div id="userInfoChip" class="hidden md:flex items-center gap-2 pl-3 ml-1 border-l border-slate-200">                    
+                        <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold shrink-0">U</div>
                         <div class="leading-tight text-left">
-                            <p id="userNameChip" class="text-xs font-semibold whitespace-nowrap">-</p>
-                            <p id="userPosChip" class="text-[10px] text-slate-400 whitespace-nowrap">-</p>
+                            <p id="userNameChip" class="text-xs font-bold text-slate-800 whitespace-nowrap">-</p>
+                            <p id="userPosChip" class="text-[10px] text-slate-500 whitespace-nowrap">-</p>
                         </div>
                     </div>                 
                 </div>
@@ -606,19 +607,15 @@
             }
         }
 
-document.addEventListener('authReady', function (e) {
+        document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
                 var displayName = user.nama || 'User';
                 
-                // --- PERUBAHAN DI SINI ---
-                // Mengambil posisi dan lokasi, lalu menggabungkannya jika lokasi ada
                 var userPos = user.posisi || '-';
-                var userLoc = user.lokasi || user.region || user.cabang || ''; // Sesuaikan dengan nama field lokasi di user_list.json
+                var userLoc = user.lokasi || user.region || user.cabang || ''; 
                 var displayPos = userLoc ? (userPos + ' - ' + userLoc) : userPos;
-                // -------------------------
 
-                // Fungsi untuk mengambil 2 huruf inisial dari nama
                 function getInitials(name) {
                     if (!name) return 'U';
                     var parts = name.trim().split(/\s+/);
@@ -670,11 +667,11 @@ document.addEventListener('authReady', function (e) {
             jsonFiles.forEach(item => {
                 const isActive = item.id === currentPeriodId;
                 
-                // Desktop Button
+                // Desktop Button - Diatur warna tab sesuai theme header terang
                 const btnDesk = document.createElement('button');
                 btnDesk.className = isActive 
-                    ? "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all bg-blue-600 text-white shadow-sm whitespace-nowrap"
-                    : "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap";
+                    ? "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all bg-blue-600 text-white shadow-xs whitespace-nowrap"
+                    : "px-2.5 sm:px-3 py-1 rounded text-[10px] sm:text-xs font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-slate-200 whitespace-nowrap";
                 btnDesk.innerText = item.label.toUpperCase() + " 2026";
                 btnDesk.onclick = () => switchData(item.id);
                 container.appendChild(btnDesk);
@@ -687,7 +684,7 @@ document.addEventListener('authReady', function (e) {
                 btnMob.innerHTML = `<i class="fa-regular fa-calendar mr-2"></i> ${item.label.toUpperCase()} 2026`;
                 btnMob.onclick = () => {
                     switchData(item.id);
-                    toggleSidebar(); // Close sidebar after selection
+                    toggleSidebar();
                 };
                 containerMobile.appendChild(btnMob);
             });
@@ -949,7 +946,6 @@ document.addEventListener('authReady', function (e) {
             }
         }
 
-        // --- DYNAMIC EXECUTIVE SUMMARY GENERATOR FOR C-LEVEL REVIEW ---
         function generateExecutiveSummary(data) {
             const fmt = (n) => new Intl.NumberFormat('id-ID').format(n);
             const isAggregate = currentMode === 'ALL';
@@ -975,7 +971,6 @@ document.addEventListener('authReady', function (e) {
 
             const ppapIssueCount = data.filter(d => d.ppap > 1).length;
 
-            // 1. Ringkasan Eksekutif (3 Poin Utama Status Kesehatan Bisnis)
             let healthP1 = "", healthP2 = "", healthP3 = "";
 
             if (isAggregate) {
@@ -997,7 +992,6 @@ document.addEventListener('authReady', function (e) {
                 <li>${healthP3}</li>
             `;
 
-            // 2. Analisis Kinerja & Tren
             let perfHTML = "";
             let pbtTrend = gapPBT >= 0 ? `<span class="text-green-600 font-bold">▲ On Target</span>` : `<span class="text-red-500 font-bold">▼ Lagging</span>`;
             let assetTrend = gapAsset >= 0 ? `<span class="text-green-600 font-bold">▲ Surplus</span>` : `<span class="text-red-500 font-bold">▼ Shortfall</span>`;
@@ -1011,7 +1005,6 @@ document.addEventListener('authReady', function (e) {
             `;
             document.getElementById('execPerfAnalysis').innerHTML = perfHTML;
 
-            // 3. Root Cause (Akar Masalah)
             let rcHTML = "";
             if (calcFDR < 30) {
                 rcHTML += `<p>• <strong>Ekspansi Pembiayaan Lambat:</strong> FDR (${calcFDR.toFixed(1)}%) relatif rendah akibat pertumbuhan pembiayaan belum berimbang dengan penghimpunan dana.</p>`;
@@ -1032,7 +1025,6 @@ document.addEventListener('authReady', function (e) {
             }
             document.getElementById('execRootCause').innerHTML = rcHTML;
 
-            // 4. Rekomendasi Action Plan (3 Langkah Strategis)
             let actionHTML = "";
             actionHTML += `<li><strong>Gencarkan Pemasaran Pembiayaan Berkualitas:</strong> Tingkatkan ekspansi pembiayaan sehat untuk menaikkan rasio FDR ke target ideal dan mendongkrak margin laba bersih.</li>`;
             actionHTML += `<li><strong>Akselerasi Cross-Selling & Transaction Banking:</strong> Dorong peningkatkan FBI melalui layanan digital, remittance, serta produk wealth/bancassurance guna menutup gap fee.</li>`;
