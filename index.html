@@ -157,6 +157,89 @@
             .user-name-reference { max-width: 130px; }
             .user-location-reference { max-width: 110px; }
         }
+
+        /* User Info Chip Styling seperti Gambar */
+        #userInfoChip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: transparent; /* Background kapsul terang */
+            padding: 4px 12px 4px 4px;
+            border-radius: 999px; /* Bentuk rounded/kapsul penuh */
+            margin-left: 6px;
+        }
+        
+        [data-theme="dark"] #userInfoChip {
+            background-color: var(--border);
+        }
+        
+        /* Lingkaran Avatar Inisial */
+        #userAvatarCircle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #6a0ded; /* Ungu sesuai gambar */
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        /* Detail Teks User */
+        .user-info-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 1.1;
+            text-align: left;
+        }
+        
+        #userNameChip {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        [data-theme="dark"] #userNameChip {
+            color: var(--text);
+        }
+        
+        .user-sub-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 2px;
+            font-size: 0.72rem;
+        }
+        
+        #userPosChip {
+            font-weight: 600;
+            color: #8b95a5;
+            text-transform: uppercase;
+        }
+        
+        .user-info-dot {
+            color: #8b95a5;
+            font-size: 0.6rem;
+        }
+        
+        /* Badge REGION Green */
+        .user-region-badge {
+            background-color: #e8f8f0;
+            color: #10b981;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
