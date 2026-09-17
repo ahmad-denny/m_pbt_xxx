@@ -83,6 +83,91 @@
         @media (min-width: 769px) {
             .mobile-sidebar-content { display: none !important; }
         }
+
+
+        /* --- HEADER USER INFO: STYLE REFERENSI --- */
+        .user-info-reference {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+            padding-left: 12px;
+            margin-left: 2px;
+            border-left: 1px solid #e5e7eb;
+        }
+
+        .user-avatar-reference {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 9999px;
+            background: #6d28d9;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: .1px;
+        }
+
+        .user-meta-reference {
+            min-width: 0;
+            line-height: 1.05;
+            text-align: left;
+        }
+
+        .user-name-reference {
+            margin: 0;
+            color: #111827;
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .user-detail-reference {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 4px;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .user-role-reference {
+            color: #64748b;
+        }
+
+        .user-separator-reference {
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .user-location-reference {
+            display: inline-flex;
+            align-items: center;
+            max-width: 150px;
+            padding: 1px 7px 2px;
+            border-radius: 9999px;
+            background: #dcfce7;
+            color: #059669;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 900px) and (min-width: 769px) {
+            .user-name-reference { max-width: 130px; }
+            .user-location-reference { max-width: 110px; }
+        }
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
@@ -226,14 +311,18 @@
                             <option value="ALL">📊 REGION SUMATERA</option>
                         </select>
                     </div>
-                    <!-- Desktop User Info Chip (Hidden on Mobile) -->
-                    <div id="userInfoChip" class="hidden md:flex items-center gap-2 pl-3 ml-1 border-l border-slate-200">                    
-                        <div id="userAvatarCircle" class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold shrink-0">U</div>
-                        <div class="leading-tight text-left">
-                            <p id="userNameChip" class="text-xs font-bold text-slate-800 whitespace-nowrap">-</p>
-                            <p id="userPosChip" class="text-[10px] text-slate-500 whitespace-nowrap">-</p>
+                    <!-- Desktop User Info - Style Referensi -->
+                    <div id="userInfoChip" class="hidden md:flex user-info-reference">
+                        <div id="userAvatarCircle" class="user-avatar-reference">U</div>
+                        <div class="user-meta-reference">
+                            <p id="userNameChip" class="user-name-reference">-</p>
+                            <div class="user-detail-reference">
+                                <span id="userPosChip" class="user-role-reference">-</span>
+                                <span class="user-separator-reference">•</span>
+                                <span id="userLocChip" class="user-location-reference">-</span>
+                            </div>
                         </div>
-                    </div>                 
+                    </div>
                 </div>
             </div>
         </nav>
@@ -624,8 +713,8 @@
                 var displayName = user.nama || 'User';
                 
                 var userPos = user.posisi || '-';
-                var userLoc = user.lokasi || user.region || user.cabang || ''; 
-                var displayPos = userLoc ? (userPos + ' - ' + userLoc) : userPos;
+                var userLoc = user.lokasi || user.region || user.cabang || '';
+                var displayPos = userPos;
 
                 function getInitials(name) {
                     if (!name) return 'U';
@@ -641,9 +730,14 @@
                 // Update Desktop Header Chips
                 var nameEl = document.getElementById('userNameChip');
                 var posEl = document.getElementById('userPosChip');
+                var locEl = document.getElementById('userLocChip');
                 var avatarEl = document.getElementById('userAvatarCircle');
                 if (nameEl) nameEl.textContent = displayName;
                 if (posEl) posEl.textContent = displayPos;
+                if (locEl) {
+                    locEl.textContent = userLoc || '-';
+                    locEl.style.display = userLoc ? 'inline-flex' : 'none';
+                }
                 if (avatarEl) avatarEl.textContent = initials;
 
                 // Update Sidebar User Info
