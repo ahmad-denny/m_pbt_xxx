@@ -150,96 +150,24 @@
         }
 
         .user-location-reference {
-            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            max-width: 150px;
+            padding: 1px 7px 2px;
+            border-radius: 9999px;
+            background: #dcfce7;
+            color: #059669;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         @media (max-width: 900px) and (min-width: 769px) {
             .user-name-reference { max-width: 130px; }
             .user-location-reference { max-width: 110px; }
         }
-
-        /* User Info Chip Styling seperti Gambar */
-        #userInfoChip {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: transparent; /* Background kapsul terang */
-            padding: 4px 12px 4px 4px;
-            border-radius: 999px; /* Bentuk rounded/kapsul penuh */
-            margin-left: 6px;
-        }
-        
-        [data-theme="dark"] #userInfoChip {
-            background-color: var(--border);
-        }
-        
-        /* Lingkaran Avatar Inisial */
-        #userAvatarCircle {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #6a0ded; /* Ungu sesuai gambar */
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        
-        /* Detail Teks User */
-        .user-info-text {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            line-height: 1.1;
-            text-align: left;
-        }
-        
-        #userNameChip {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #1f2937;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        
-        [data-theme="dark"] #userNameChip {
-            color: var(--text);
-        }
-        
-        .user-sub-info {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 2px;
-            font-size: 0.72rem;
-        }
-        
-        #userPosChip {
-            font-weight: 600;
-            color: #8b95a5;
-            text-transform: uppercase;
-        }
-        
-        .user-info-dot {
-            color: #8b95a5;
-            font-size: 0.6rem;
-        }
-        
-        /* Badge REGION Green */
-        .user-region-badge {
-            background-color: #e8f8f0;
-            color: #10b981;
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 6px;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-        
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
@@ -384,17 +312,17 @@
                         </select>
                     </div>
                     <!-- Desktop User Info - Style Referensi -->
-                    <div id="userInfoChip">
-                        <div id="userAvatarCircle">AD</div>
-                        <div class="user-info-text">
-                            <div id="userNameChip">AHMAD DENNY</div>
-                            <div class="user-sub-info">
-                                <span id="userPosChip">RBPM</span>
-                                <span class="user-info-dot">•</span>
-                                <span class="user-region-badge" id="userRegionChip">REGION</span>
+                    <div id="userInfoChip" class="hidden md:flex user-info-reference">
+                        <div id="userAvatarCircle" class="user-avatar-reference">U</div>
+                        <div class="user-meta-reference">
+                            <p id="userNameChip" class="user-name-reference">-</p>
+                            <div class="user-detail-reference">
+                                <span id="userPosChip" class="user-role-reference">-</span>
+                                <span class="user-separator-reference">•</span>
+                                <span id="userLocChip" class="user-location-reference">-</span>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </nav>
@@ -782,29 +710,43 @@
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
+                var displayName = user.nama || 'User';
+                
+                var userPos = user.posisi || '-';
+                var userLoc = user.lokasi || user.region || user.cabang || '';
+                var displayPos = userPos;
+
+                function getInitials(name) {
+                    if (!name) return 'U';
+                    var parts = name.trim().split(/\s+/);
+                    if (parts.length >= 2) {
+                        return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+                    }
+                    return parts[0].substring(0, 2).toUpperCase();
+                }
+
+                var initials = getInitials(displayName);
+
+                // Update Desktop Header Chips
                 var nameEl = document.getElementById('userNameChip');
                 var posEl = document.getElementById('userPosChip');
-                var regionEl = document.getElementById('userRegionChip');
+                var locEl = document.getElementById('userLocChip');
                 var avatarEl = document.getElementById('userAvatarCircle');
-                
-                var displayName = user.nama || 'AHMAD DENNY';
-                var userPos = user.posisi || 'RBPM';
-                var userRegion = user.region || user.lokasi || 'REGION';
-                var userInitials = getInitials(displayName);
-        
-                if (nameEl) nameEl.textContent = displayName.toUpperCase();
-                if (posEl) posEl.textContent = userPos.toUpperCase();
-                if (regionEl) regionEl.textContent = userRegion.toUpperCase();
-                if (avatarEl) avatarEl.textContent = userInitials;
-        
-                // Sidebar user info update
-                var sidebarNameEl = document.getElementById('sidebarUserName');
-                var sidebarPosEl = document.getElementById('sidebarUserPosition');
-                var sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
-                
-                if (sidebarNameEl) sidebarNameEl.textContent = displayName;
-                if (sidebarPosEl) sidebarPosEl.textContent = userPos + ' • ' + userRegion;
-                if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
+                if (nameEl) nameEl.textContent = displayName;
+                if (posEl) posEl.textContent = displayPos;
+                if (locEl) {
+                    locEl.textContent = userLoc || '-';
+                    locEl.style.display = userLoc ? 'inline-flex' : 'none';
+                }
+                if (avatarEl) avatarEl.textContent = initials;
+
+                // Update Sidebar User Info
+                var nameSide = document.getElementById('userNameSidebar');
+                var posSide = document.getElementById('userPosSidebar');
+                var avatarSide = document.getElementById('userAvatarSidebar');
+                if (nameSide) nameSide.textContent = displayName;
+                if (posSide) posSide.textContent = displayPos;
+                if (avatarSide) avatarSide.textContent = initials;
             }
 
             document.body.classList.add('logged-in');
