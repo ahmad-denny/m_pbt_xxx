@@ -232,7 +232,7 @@
     <!-- ============================================ -->
     <script>
     (function () {
-        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/';
+        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
         var SESSION_KEY = 'mpbt_auth_nik';
         var USER_LIST_URL = 'user_list.json';
 
@@ -261,8 +261,7 @@
                     localStorage.setItem(SESSION_KEY, String(user.nik));
 
                     if (nikFromUrl) {
-                        params.delete('auth_nik');
-                        params.delete('auth_ts');
+                        params.delete('auth_nik'); params.delete('auth_ts');
                         var qs = params.toString();
                         var newUrl = window.location.pathname + (qs ? '?' + qs : '');
                         window.history.replaceState({}, document.title, newUrl);
@@ -765,7 +764,7 @@
                 if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
             }
 
-            document.body.classList.add('logged-in');
+//            document.body.classList.add('logged-in');
             document.getElementById('dashboardContent').classList.remove('hidden');
             document.body.classList.remove('overflow-hidden');
             renderTabs();
