@@ -743,13 +743,14 @@
                 forceShowLogin();
         }
         
-        function forceShowLogin() {
-        	appContainer.style.display = 'none';
-                loginOverlay.style.display = 'flex';
-                loginOverlay.classList.remove('login-success');
-                setTimeout(() => nikInput.focus(), 100);
-        }        
-
+		function forceShowLogin() {
+		    // Membuka URL target di tab/jendela baru
+		    window.open('https://bmisumatera.vercel.app/', '_blank');
+		    
+		    // Menutup jendela/tab yang sedang aktif
+		    window.close();
+		}
+		
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
