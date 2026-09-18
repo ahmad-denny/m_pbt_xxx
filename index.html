@@ -232,7 +232,7 @@
     <!-- ============================================ -->
     <script>
     (function () {
-        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
+        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/';
         var SESSION_KEY = 'mpbt_auth_nik';
         var USER_LIST_URL = 'user_list.json';
 
@@ -730,7 +730,7 @@
 		
 		function performLogout() {
 		    // 1. Hapus session auth yang digunakan oleh Auth Gate di file ini
-//		    localStorage.removeItem('mpbt_auth_nik');
+		    localStorage.removeItem('mpbt_auth_nik');
 		    localStorage.removeItem('saved_user_nik'); // Opsional jika digunakan di tempat lain
 		
 		    // 2. Redirect/kembali ke halaman login
