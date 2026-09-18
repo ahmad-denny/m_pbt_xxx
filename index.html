@@ -168,17 +168,6 @@
             .user-name-reference { max-width: 130px; }
             .user-location-reference { max-width: 110px; }
         }
-
-        .logout-btn:hover { background: #ef4444; color: white; border-color: #ef4444; }
-        .action-btn {
-            background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main);
-            width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
-            backdrop-filter: blur(10px); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease; flex-shrink: 0; text-decoration: none;
-        }
-        .action-btn:hover { transform: scale(1.08); }
-        
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
@@ -261,7 +250,8 @@
                     localStorage.setItem(SESSION_KEY, String(user.nik));
 
                     if (nikFromUrl) {
-                        params.delete('auth_nik'); params.delete('auth_ts');
+                        params.delete('auth_nik');
+                        params.delete('auth_ts');
                         var qs = params.toString();
                         var newUrl = window.location.pathname + (qs ? '?' + qs : '');
                         window.history.replaceState({}, document.title, newUrl);
@@ -277,8 +267,7 @@
     </script>
     <!-- ============================================ -->
 
-<!--    <div id="dashboardContent" class="hidden"> -->
-    <div id="dashboardContent">
+    <div id="dashboardContent" class="hidden">
         <!-- HEADER / NAVBAR PUTIH -->
         <nav class="bg-white text-slate-800 shadow-sm border-b border-gray-200 sticky top-0 z-50">
             <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
@@ -334,9 +323,6 @@
                             </div>
                         </div>
                     </div>
-                    <button class="action-btn logout-btn" id="logout-btn" title="Logout" style="display:none;" aria-label="Logout">
-	                    <i class="fas fa-right-from-bracket"></i>
-                    </button>
                 </div>
             </div>
         </nav>
@@ -721,51 +707,49 @@
             }
         }
 
-		const logoutBtn = document.getElementById('logout-btn');
-		
-		if (logoutBtn) {
-		    logoutBtn.style.display = 'flex';
-		    logoutBtn.addEventListener('click', performLogout);
-		}
-		
-		function performLogout() {
-		    // 1. Hapus session auth yang digunakan oleh Auth Gate di file ini
-		    localStorage.removeItem('mpbt_auth_nik');
-		    localStorage.removeItem('saved_user_nik'); // Opsional jika digunakan di tempat lain
-		
-		    // 2. Redirect/kembali ke halaman login
-		    window.location.replace('https://bmisumatera.vercel.app/');
-		}
-		
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
             if (user) {
+                var displayName = user.nama || 'User';
+                
+                var userPos = user.posisi || '-';
+                var userLoc = user.lokasi || user.region || user.cabang || '';
+                var displayPos = userPos;
+
+                function getInitials(name) {
+                    if (!name) return 'U';
+                    var parts = name.trim().split(/\s+/);
+                    if (parts.length >= 2) {
+                        return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+                    }
+                    return parts[0].substring(0, 2).toUpperCase();
+                }
+
+                var initials = getInitials(displayName);
+
+                // Update Desktop Header Chips
                 var nameEl = document.getElementById('userNameChip');
                 var posEl = document.getElementById('userPosChip');
-                var regionEl = document.getElementById('userRegionChip');
+                var locEl = document.getElementById('userLocChip');
                 var avatarEl = document.getElementById('userAvatarCircle');
-                
-                var displayName = user.nama || 'AHMAD DENNY';
-                var userPos = user.posisi || 'RBPM';
-                var userRegion = user.region || user.lokasi || 'REGION';
-                var userInitials = getInitials(displayName);
-        
-                if (nameEl) nameEl.textContent = displayName.toUpperCase();
-                if (posEl) posEl.textContent = userPos.toUpperCase();
-                if (regionEl) regionEl.textContent = userRegion.toUpperCase();
-                if (avatarEl) avatarEl.textContent = userInitials;
-        
-                // Sidebar user info update
-                var sidebarNameEl = document.getElementById('sidebarUserName');
-                var sidebarPosEl = document.getElementById('sidebarUserPosition');
-                var sidebarAvatarEl = document.getElementById('sidebarUserAvatar');
-                
-                if (sidebarNameEl) sidebarNameEl.textContent = displayName;
-                if (sidebarPosEl) sidebarPosEl.textContent = userPos + ' • ' + userRegion;
-                if (sidebarAvatarEl) sidebarAvatarEl.textContent = userInitials;
+                if (nameEl) nameEl.textContent = displayName;
+                if (posEl) posEl.textContent = displayPos;
+                if (locEl) {
+                    locEl.textContent = userLoc || '-';
+                    locEl.style.display = userLoc ? 'inline-flex' : 'none';
+                }
+                if (avatarEl) avatarEl.textContent = initials;
+
+                // Update Sidebar User Info
+                var nameSide = document.getElementById('userNameSidebar');
+                var posSide = document.getElementById('userPosSidebar');
+                var avatarSide = document.getElementById('userAvatarSidebar');
+                if (nameSide) nameSide.textContent = displayName;
+                if (posSide) posSide.textContent = displayPos;
+                if (avatarSide) avatarSide.textContent = initials;
             }
 
-//            document.body.classList.add('logged-in');
+            document.body.classList.add('logged-in');
             document.getElementById('dashboardContent').classList.remove('hidden');
             document.body.classList.remove('overflow-hidden');
             renderTabs();
@@ -1407,23 +1391,6 @@
                 else subtitleEl.innerText = brVal;
             }
         }
-
-		const logoutBtn = document.getElementById('logout-btn');
-		
-		if (logoutBtn) {
-		    logoutBtn.style.display = 'flex';
-		    logoutBtn.addEventListener('click', performLogout);
-		}
-		
-		function performLogout() {
-		    // 1. Hapus session auth yang digunakan oleh Auth Gate di file ini
-		    localStorage.removeItem('mpbt_auth_nik');
-		    localStorage.removeItem('saved_user_nik'); // Opsional jika digunakan di tempat lain
-		
-		    // 2. Redirect/kembali ke halaman login
-		    window.location.replace('https://bmisumatera.vercel.app/');
-		}
-		
     </script>
 </body>
 </html>
