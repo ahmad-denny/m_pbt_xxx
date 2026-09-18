@@ -168,6 +168,9 @@
             .user-name-reference { max-width: 130px; }
             .user-location-reference { max-width: 110px; }
         }
+
+        .logout-btn:hover { background: #ef4444; color: white; border-color: #ef4444; }
+        
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
@@ -323,6 +326,9 @@
                             </div>
                         </div>
                     </div>
+                    <button class="action-btn logout-btn" id="logout-btn" title="Logout" style="display:none;" aria-label="Logout">
+	                    <i class="fas fa-right-from-bracket"></i>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -706,6 +712,35 @@
                 }
             }
         }
+
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        
+        if (logoutBtn) logoutBtn.style.display = 'flex';
+        
+        
+        logoutBtn.addEventListener('click', function () {
+                    performLogout();
+                });
+        
+        function performLogout() {
+        	localStorage.removeItem('saved_user_nik');
+                activeUser = null;
+        
+                document.getElementById('user-chip').style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'none';
+                nikInput.value = '';
+                loginError.style.display = 'none';
+        
+                forceShowLogin();
+        }
+        
+        function forceShowLogin() {
+        	appContainer.style.display = 'none';
+                loginOverlay.style.display = 'flex';
+                loginOverlay.classList.remove('login-success');
+                setTimeout(() => nikInput.focus(), 100);
+        }        
 
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
