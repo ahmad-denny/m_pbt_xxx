@@ -721,34 +721,20 @@
             }
         }
 
-        const logoutBtn = document.getElementById('logout-btn');
-        
-        
-        if (logoutBtn) logoutBtn.style.display = 'flex';
-        
-        
-        logoutBtn.addEventListener('click', function () {
-                    performLogout();
-                });
-        
-        function performLogout() {
-        	localStorage.removeItem('saved_user_nik');
-                activeUser = null;
-        
-                document.getElementById('user-chip').style.display = 'none';
-                if (logoutBtn) logoutBtn.style.display = 'none';
-                nikInput.value = '';
-                loginError.style.display = 'none';
-        
-                forceShowLogin();
-        }
-        
-		function forceShowLogin() {
-		    // Membuka URL target di tab/jendela baru
-		    window.open('https://bmisumatera.vercel.app/', '_blank');
-		    
-		    // Menutup jendela/tab yang sedang aktif
-		    window.close();
+		const logoutBtn = document.getElementById('logout-btn');
+		
+		if (logoutBtn) {
+		    logoutBtn.style.display = 'flex';
+		    logoutBtn.addEventListener('click', performLogout);
+		}
+		
+		function performLogout() {
+		    // 1. Hapus session auth yang digunakan oleh Auth Gate di file ini
+		    localStorage.removeItem('mpbt_auth_nik');
+		    localStorage.removeItem('saved_user_nik'); // Opsional jika digunakan di tempat lain
+		
+		    // 2. Redirect/kembali ke halaman login
+		    window.location.replace('https://bmisumatera.vercel.app/');
 		}
 		
         document.addEventListener('authReady', function (e) {
