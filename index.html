@@ -168,6 +168,17 @@
             .user-name-reference { max-width: 130px; }
             .user-location-reference { max-width: 110px; }
         }
+
+        .logout-btn:hover { background: #ef4444; color: white; border-color: #ef4444; }
+        .action-btn {
+            background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main);
+            width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
+            backdrop-filter: blur(10px); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; flex-shrink: 0; text-decoration: none;
+        }
+        .action-btn:hover { transform: scale(1.08); }
+        
     </style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
