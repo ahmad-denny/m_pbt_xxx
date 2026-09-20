@@ -216,56 +216,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
-    <!-- ============================================ -->
-    <script>
-    (function () {
-        var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
-        var SESSION_KEY = 'mpbt_auth_nik';
-        var USER_LIST_URL = 'user_list.json';
-
-        function goToLogin() { window.location.replace(LOGIN_PAGE_URL); }
-
-        function validateSession() {
-            var params = new URLSearchParams(window.location.search);
-            var nikFromUrl = params.get('auth_nik');
-            var nik = nikFromUrl || localStorage.getItem(SESSION_KEY);
-
-            if (!nik) { goToLogin(); return; }
-
-            fetch(USER_LIST_URL, { cache: 'no-store' })
-                .then(function (res) {
-                    if (!res.ok) throw new Error('Gagal memuat user_list.json');
-                    return res.json();
-                })
-                .then(function (data) {
-                    var userList = Array.isArray(data.user_list) ? data.user_list : [];
-                    var user = userList.find(function (u) {
-                        return String(u.nik).trim() === String(nik).trim();
-                    });
-
-                    if (!user) { localStorage.removeItem(SESSION_KEY); goToLogin(); return; }
-
-                    localStorage.setItem(SESSION_KEY, String(user.nik));
-
-                    if (nikFromUrl) {
-                        params.delete('auth_nik');
-                        params.delete('auth_ts');
-                        var qs = params.toString();
-                        var newUrl = window.location.pathname + (qs ? '?' + qs : '');
-                        window.history.replaceState({}, document.title, newUrl);
-                    }
-
-                    document.dispatchEvent(new CustomEvent('authReady', { detail: user }));
-                })
-                .catch(function (err) { console.error('Auth check failed:', err); goToLogin(); });
-        }
-
-        validateSession();
-    })();
-    </script>
-    <!-- ============================================ -->
 
     <div id="dashboardContent" class="hidden">
         <!-- HEADER / NAVBAR PUTIH -->
@@ -323,6 +273,9 @@
                             </div>
                         </div>
                     </div>
+                    <button class="action-btn logout-btn" id="logout-btn" title="Logout" style="display:none;" aria-label="Logout">
+                    <i class="fas fa-right-from-bracket"></i>
+                    </button>
                 </div>
             </div>
         </nav>
@@ -1390,6 +1343,80 @@
                 if (brVal=='ALL') subtitleEl.innerText = "REGION SUMATERA";
                 else subtitleEl.innerText = brVal;
             }
+        }
+        
+        <!-- ============================================ -->
+        <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
+        <!-- ============================================ -->
+        (function () {
+            var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
+            var SESSION_KEY = 'mpbt_auth_nik';
+            var USER_LIST_URL = 'user_list.json';
+    
+            function goToLogin() { window.location.replace(LOGIN_PAGE_URL); }
+    
+            function validateSession() {
+                var params = new URLSearchParams(window.location.search);
+                var nikFromUrl = params.get('auth_nik');
+                var nik = nikFromUrl || localStorage.getItem(SESSION_KEY);
+    
+                if (!nik) { goToLogin(); return; }
+    
+                fetch(USER_LIST_URL, { cache: 'no-store' })
+                    .then(function (res) {
+                        if (!res.ok) throw new Error('Gagal memuat user_list.json');
+                        return res.json();
+                    })
+                    .then(function (data) {
+                        var userList = Array.isArray(data.user_list) ? data.user_list : [];
+                        var user = userList.find(function (u) {
+                            return String(u.nik).trim() === String(nik).trim();
+                        });
+    
+                        if (!user) { localStorage.removeItem(SESSION_KEY); goToLogin(); return; }
+    
+                        localStorage.setItem(SESSION_KEY, String(user.nik));
+    
+                        if (nikFromUrl) {
+                            params.delete('auth_nik');
+                            params.delete('auth_ts');
+                            var qs = params.toString();
+                            var newUrl = window.location.pathname + (qs ? '?' + qs : '');
+                            window.history.replaceState({}, document.title, newUrl);
+                        }
+    
+                        document.dispatchEvent(new CustomEvent('authReady', { detail: user }));
+                    })
+                    .catch(function (err) { console.error('Auth check failed:', err); goToLogin(); });
+            }
+    
+            validateSession();
+        })();
+
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+            logoutBtn.style.display = 'flex';
+            logoutBtn.addEventListener('click', performLogout);
+        }
+        function performLogout() {
+            // Tampilkan dialog konfirmasi
+            const isConfirmed = confirm('Apakah Anda yakin ingin keluar?');
+        
+            // Jika pengguna menekan tombol "OK", jalankan proses logout
+            if (isConfirmed) {
+                // 1. Hapus session auth
+                localStorage.removeItem('mpbt_auth_nik');
+                localStorage.removeItem('saved_user_nik');
+        
+                // 2. Tutup window/tab
+                window.close();
+        
+                // Fallback jika window.close() diblokir oleh browser
+                setTimeout(() => {
+                    window.location.replace('https://bmisumatera.vercel.app/');
+                }, 100);
+            }
+            // Jika pengguna menekan "Batal", fungsi berhenti dan tidak terjadi apa-apa
         }
     </script>
 </body>
