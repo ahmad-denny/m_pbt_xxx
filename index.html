@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f3f4f6; }
@@ -1409,26 +1410,34 @@
             logoutBtn.style.display = 'flex';
             logoutBtn.addEventListener('click', performLogout);
         }
+        
         function performLogout() {
-            // Tampilkan dialog konfirmasi
-            const isConfirmed = confirm('Apakah Anda yakin ingin keluar?');
+            Swal.fire({
+                title: 'Konfirmasi Keluar',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // 1. Hapus session auth
+                    localStorage.removeItem('mdashbmi_auth_nik');
+                    localStorage.removeItem('saved_user_nik');
         
-            // Jika pengguna menekan tombol "OK", jalankan proses logout
-            if (isConfirmed) {
-                // 1. Hapus session auth
-                localStorage.removeItem('mpbt_auth_nik');
-                localStorage.removeItem('saved_user_nik');
+                    // 2. Tutup window/tab
+                    window.close();
         
-                // 2. Tutup window/tab
-                window.close();
-        
-                // Fallback jika window.close() diblokir oleh browser
-                setTimeout(() => {
-                    window.location.replace('https://bmisumatera.vercel.app/');
-                }, 100);
-            }
-            // Jika pengguna menekan "Batal", fungsi berhenti dan tidak terjadi apa-apa
+                    // Fallback jika window.close() diblokir browser
+                    setTimeout(() => {
+                        window.location.replace('https://bmisumatera.vercel.app/');
+                    }, 100);
+                }
+            });
         }
+    
     </script>
 </body>
 </html>
