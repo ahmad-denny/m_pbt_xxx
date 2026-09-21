@@ -1411,16 +1411,16 @@
             logoutBtn.addEventListener('click', performLogout);
         }
         
-        function performLogout() {
-            Swal.fire({
-                title: 'Konfirmasi Keluar',
-                text: 'Apakah Anda yakin ingin keluar?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'linear-gradient(135deg, #9b5de5, #6441A5);',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal'
+		function performLogout() {
+		    Swal.fire({
+		        title: 'Confirmation',
+		        text: 'Are you sure?',
+		        icon: 'warning',
+		        showCancelButton: true,
+		        confirmButtonColor: 'linear-gradient(135deg, #9b5de5, #6441A5);',
+		        cancelButtonColor: '#d33',
+		        confirmButtonText: 'Yes, Close',
+		        cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
                     // 1. Hapus session auth
