@@ -37,7 +37,7 @@
         .footer { text-align: center; padding: 15px 5px; font-size: 0.75rem; color: #64748b; margin-top: 10px; }        
 
         body.logged-in #dashboardContent {
-            display: block !important;
+            display: flex !important;
         }
 
         /* --- MOBILE SIDEBAR STYLES --- */
@@ -229,7 +229,7 @@
     </div>
 
 
-    <div id="dashboardContent" class="hidden h-screen flex flex-col overflow-hidden">
+    <div id="dashboardContent" class="hidden h-screen flex-col overflow-hidden">
         <!-- HEADER / NAVBAR PUTIH -->
         <nav class="bg-white text-slate-800 shadow-sm border-b border-gray-200 shrink-0 z-50">
             <div class="container mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
@@ -292,295 +292,296 @@
             </div>
         </nav>
 
+        <!-- WRAPPER CONTENT SCROLLABLE -->
         <div class="flex-1 overflow-y-auto w-full">
-		<div class="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
-            <!-- Cards Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">            
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-600 relative overflow-hidden">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPBT"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PBT After HOCA</p>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumPBT">-</h3>
-                        </div>
-                        <div class="p-1 sm:p-1.5 bg-violet-50 rounded-full text-violet-700 hidden sm:block"><i class="fa-solid fa-coins text-xs sm:text-sm"></i></div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
-                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetPBT" class="font-semibold">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Gap PBT:</span><span id="gapPBT" class="font-bold">-</span></div>
-                        <div id="countPbtPosNeg" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">🟢 Positif</span> <span id="cntPbtPos" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">🔴 Negatif</span> <span id="cntPbtNeg" class="font-bold">0</span></div>
-                        </div>
-                        <div id="countPBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntPbtOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntPbtNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-emerald-500 relative overflow-hidden">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconAsset"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Asset</p>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumAsset">-</h3>
-                        </div>
-                        <div class="p-1 sm:p-1.5 bg-purple-50 rounded-full text-purple-600 hidden sm:block"><i class="fa-solid fa-building-columns text-xs sm:text-sm"></i></div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
-                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetAsset" class="font-semibold">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Gap Asset:</span><span id="gapAsset" class="font-bold">-</span></div>
-                        <div id="countAsset" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntAssetOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntAssetNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-rose-500 relative overflow-hidden">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconCASA"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div class="w-full">
-                            <div class="flex justify-between items-center">
-                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">CASA Ratio</p>
-                                <span id="casaIndicator" class="text-xs"></span>
+            <div class="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">            
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-600 relative overflow-hidden">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPBT"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PBT After HOCA</p>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumPBT">-</h3>
                             </div>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgCASA">-</h3>
-                            <div class="mt-1 pt-1 border-t border-dashed border-gray-200 flex justify-between items-center">
-                                <div>
-                                    <p class="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase">COF (≤2.3%)</p>
-                                    <div class="flex items-baseline gap-1">
-                                        <span class="text-xs sm:text-sm font-extrabold text-slate-700" id="avgCOF">-</span>
-                                        <span id="cofIndicator" class="text-xs"></span>
+                            <div class="p-1 sm:p-1.5 bg-violet-50 rounded-full text-violet-700 hidden sm:block"><i class="fa-solid fa-coins text-xs sm:text-sm"></i></div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                            <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetPBT" class="font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-gray-500">Gap PBT:</span><span id="gapPBT" class="font-bold">-</span></div>
+                            <div id="countPbtPosNeg" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">🟢 Positif</span> <span id="cntPbtPos" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">🔴 Negatif</span> <span id="cntPbtNeg" class="font-bold">0</span></div>
+                            </div>
+                            <div id="countPBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntPbtOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntPbtNo" class="font-bold">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-emerald-500 relative overflow-hidden">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconAsset"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Asset</p>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumAsset">-</h3>
+                            </div>
+                            <div class="p-1 sm:p-1.5 bg-purple-50 rounded-full text-purple-600 hidden sm:block"><i class="fa-solid fa-building-columns text-xs sm:text-sm"></i></div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                            <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target:</span><span id="targetAsset" class="font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-gray-500">Gap Asset:</span><span id="gapAsset" class="font-bold">-</span></div>
+                            <div id="countAsset" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntAssetOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntAssetNo" class="font-bold">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-rose-500 relative overflow-hidden">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconCASA"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div class="w-full">
+                                <div class="flex justify-between items-center">
+                                    <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">CASA Ratio</p>
+                                    <span id="casaIndicator" class="text-xs"></span>
+                                </div>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgCASA">-</h3>
+                                <div class="mt-1 pt-1 border-t border-dashed border-gray-200 flex justify-between items-center">
+                                    <div>
+                                        <p class="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase">COF (≤2.3%)</p>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-xs sm:text-sm font-extrabold text-slate-700" id="avgCOF">-</span>
+                                            <span id="cofIndicator" class="text-xs"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
-                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Actual:</span><span id="actCasaAmt" class="font-semibold text-slate-700">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Gap CASA:</span><span id="gapCasaAmt" class="font-bold">-</span></div>
-                        <div id="countCASA" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ CASA ≥60%</span> <span id="cntCasaOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">⚠️ <60%</span> <span id="cntCasaNo" class="font-bold">0</span></div>
-                            <div class="flex justify-between mt-0.5"><span class="text-green-600">✅ COF ≤2.3%</span> <span id="cntCofOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-orange-500">⚠️ COF >2.3%</span> <span id="cntCofNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-amber-500 relative overflow-hidden">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFDR"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">FDR Ratio</p>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgFDR">-</h3>
-                        </div>
-                        <div class="p-1 sm:p-1.5 bg-violet-50 rounded-full text-violet-600 hidden sm:block"><i class="fa-solid fa-money-bill-transfer text-xs sm:text-sm"></i></div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
-                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Financing:</span><span id="actFinancing" class="font-semibold text-slate-700">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Gap Fin:</span><span id="gapFinancing" class="font-bold">-</span></div>
-                        <div id="countFDR" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ FDR ≥30%</span> <span id="cntFdrOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-orange-500">⚠️ <30%</span> <span id="cntFdrNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFBI"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Fee Based Income</p>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumFBI">-</h3>
-                        </div>
-                        <div class="p-1 sm:p-1.5 bg-amber-50 rounded-full text-amber-600 hidden sm:block"><i class="fa-solid fa-briefcase text-xs sm:text-sm"></i></div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
-                        <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target FBI:</span><span id="targetFBI" class="font-semibold">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Gap FBI:</span><span id="gapFBI" class="font-bold">-</span></div>
-                        <div id="countFBI" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntFbiOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntFbiNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-fuchsia-500 relative overflow-hidden">
-                    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPPAP"></div>
-                    <div class="flex justify-between items-start pr-6 sm:pr-8">
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PPAP / YTD > 1%</p>
-                            <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="valPPAP">-</h3>
-                        </div>
-                        <div class="p-1 sm:p-1.5 bg-rose-50 rounded-full text-rose-600 hidden sm:block"><i class="fa-solid fa-triangle-exclamation text-xs sm:text-sm"></i></div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-gray-100">
-                         <span id="statusPPAP" class="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 block text-center">-</span>
-                         <div id="countPPAP" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 text-[9px] sm:text-[10px] hidden">
-                            <div class="flex justify-between"><span class="text-green-600">✅ Secured (<1%)</span> <span id="cntPpapOk" class="font-bold">0</span></div>
-                            <div class="flex justify-between"><span class="text-red-500">⚠️ Alert (>1%)</span> <span id="cntPpapNo" class="font-bold">0</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- EXECUTIVE MANAGEMENT REVIEW SUMMARY SECTION -->
-            <div id="executiveSummaryContainer" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
-                <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-2">
-                    <div class="p-1.5 bg-violet-900 text-white rounded-lg"><i class="fa-solid fa-chart-line text-sm"></i></div>
-                    <h2 class="text-sm sm:text-base font-bold text-slate-800">Ringkasan Eksekutif & Review Manajemen</h2>
-                </div>
-                
-                <div class="space-y-4 text-xs sm:text-sm text-slate-700">
-                    <!-- Status Kesehatan Bisnis -->
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                        <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                            <i class="fa-solid fa-heart-pulse text-rose-500"></i> Status Kesehatan Bisnis Saat Ini
-                        </h3>
-                        <ul id="execHealthPoints" class="list-disc list-inside space-y-1 text-slate-600 pl-1">
-                            <!-- Injected by JS -->
-                        </ul>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- 1. Analisis Kinerja & Tren -->
-                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
-                            <h4 class="font-bold text-violet-900 mb-1.5 flex items-center gap-1">
-                                <i class="fa-solid fa-magnifying-glass-chart text-violet-600"></i> 1. Analisis Kinerja & Tren
-                            </h4>
-                            <div id="execPerfAnalysis" class="space-y-1.5 leading-relaxed text-slate-600">
-                                <!-- Injected by JS -->
+                        <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                            <div class="flex justify-between mb-0.5"><span class="text-gray-500">Actual:</span><span id="actCasaAmt" class="font-semibold text-slate-700">-</span></div>
+                            <div class="flex justify-between"><span class="text-gray-500">Gap CASA:</span><span id="gapCasaAmt" class="font-bold">-</span></div>
+                            <div id="countCASA" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ CASA ≥60%</span> <span id="cntCasaOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">⚠️ <60%</span> <span id="cntCasaNo" class="font-bold">0</span></div>
+                                <div class="flex justify-between mt-0.5"><span class="text-green-600">✅ COF ≤2.3%</span> <span id="cntCofOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-orange-500">⚠️ COF >2.3%</span> <span id="cntCofNo" class="font-bold">0</span></div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- 2. Root Cause -->
-                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
-                            <h4 class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
-                                <i class="fa-solid fa-brain text-amber-600"></i> 2. Root Cause (Akar Masalah)
-                            </h4>
-                            <div id="execRootCause" class="space-y-1.5 leading-relaxed text-slate-600">
-                                <!-- Injected by JS -->
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-amber-500 relative overflow-hidden">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFDR"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">FDR Ratio</p>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="avgFDR">-</h3>
+                            </div>
+                            <div class="p-1 sm:p-1.5 bg-violet-50 rounded-full text-violet-600 hidden sm:block"><i class="fa-solid fa-money-bill-transfer text-xs sm:text-sm"></i></div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                            <div class="flex justify-between mb-0.5"><span class="text-gray-500">Financing:</span><span id="actFinancing" class="font-semibold text-slate-700">-</span></div>
+                            <div class="flex justify-between"><span class="text-gray-500">Gap Fin:</span><span id="gapFinancing" class="font-bold">-</span></div>
+                            <div id="countFDR" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ FDR ≥30%</span> <span id="cntFdrOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-orange-500">⚠️ <30%</span> <span id="cntFdrNo" class="font-bold">0</span></div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- 3. Rekomendasi Tindakan -->
-                        <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
-                            <h4 class="font-bold text-emerald-900 mb-1.5 flex items-center gap-1">
-                                <i class="fa-solid fa-list-check text-emerald-600"></i> 3. Rekomendasi Action Plan
-                            </h4>
-                            <ol id="execActionPlan" class="list-decimal list-inside space-y-1.5 leading-relaxed text-slate-600">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFBI"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">Fee Based Income</p>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="sumFBI">-</h3>
+                            </div>
+                            <div class="p-1 sm:p-1.5 bg-amber-50 rounded-full text-amber-600 hidden sm:block"><i class="fa-solid fa-briefcase text-xs sm:text-sm"></i></div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-100 text-[9px] sm:text-[10px]">
+                            <div class="flex justify-between mb-0.5"><span class="text-gray-500">Target FBI:</span><span id="targetFBI" class="font-semibold">-</span></div>
+                            <div class="flex justify-between"><span class="text-gray-500">Gap FBI:</span><span id="gapFBI" class="font-bold">-</span></div>
+                            <div id="countFBI" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ Achieved</span> <span id="cntFbiOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntFbiNo" class="font-bold">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-xl shadow-sm border-t-4 sm:border-t-8 border-l-2 border-fuchsia-500 relative overflow-hidden">
+                        <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPPAP"></div>
+                        <div class="flex justify-between items-start pr-6 sm:pr-8">
+                            <div>
+                                <p class="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wider">PPAP / YTD > 1%</p>
+                                <h3 class="text-sm sm:text-lg font-extrabold mt-0.5 text-slate-800" id="valPPAP">-</h3>
+                            </div>
+                            <div class="p-1 sm:p-1.5 bg-rose-50 rounded-full text-rose-600 hidden sm:block"><i class="fa-solid fa-triangle-exclamation text-xs sm:text-sm"></i></div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-100">
+                             <span id="statusPPAP" class="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-500 block text-center">-</span>
+                             <div id="countPPAP" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 text-[9px] sm:text-[10px] hidden">
+                                <div class="flex justify-between"><span class="text-green-600">✅ Secured (<1%)</span> <span id="cntPpapOk" class="font-bold">0</span></div>
+                                <div class="flex justify-between"><span class="text-red-500">⚠️ Alert (>1%)</span> <span id="cntPpapNo" class="font-bold">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXECUTIVE MANAGEMENT REVIEW SUMMARY SECTION -->
+                <div id="executiveSummaryContainer" class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6">
+                    <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-2">
+                        <div class="p-1.5 bg-violet-900 text-white rounded-lg"><i class="fa-solid fa-chart-line text-sm"></i></div>
+                        <h2 class="text-sm sm:text-base font-bold text-slate-800">Ringkasan Eksekutif & Review Manajemen</h2>
+                    </div>
+                    
+                    <div class="space-y-4 text-xs sm:text-sm text-slate-700">
+                        <!-- Status Kesehatan Bisnis -->
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                            <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-heart-pulse text-rose-500"></i> Status Kesehatan Bisnis Saat Ini
+                            </h3>
+                            <ul id="execHealthPoints" class="list-disc list-inside space-y-1 text-slate-600 pl-1">
                                 <!-- Injected by JS -->
-                            </ol>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Charts Grid -->
-            <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 transition-all duration-300">
-                
-                <!-- CHART 1: PBT -->
-                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-2 gap-1">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Profit Before Tax After HOCA</h3>
-                        <div id="ctrl-pbt" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
-                            <button onclick="setChartRank('pbt', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
-                            <button onclick="setChartRank('pbt', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
-                            <button onclick="setChartRank('pbt', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper flex-grow" id="wrap-pbt"><canvas id="pbtChart"></canvas></div>
-                </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- 1. Analisis Kinerja & Tren -->
+                            <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                                <h4 class="font-bold text-violet-900 mb-1.5 flex items-center gap-1">
+                                    <i class="fa-solid fa-magnifying-glass-chart text-violet-600"></i> 1. Analisis Kinerja & Tren
+                                </h4>
+                                <div id="execPerfAnalysis" class="space-y-1.5 leading-relaxed text-slate-600">
+                                    <!-- Injected by JS -->
+                                </div>
+                            </div>
 
-                <!-- CHART 2: ASSET -->
-                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-2 gap-1">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Asset Performance</h3>
-                        <div id="ctrl-asset" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
-                            <button onclick="setChartRank('asset', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
-                            <button onclick="setChartRank('asset', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
-                            <button onclick="setChartRank('asset', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            <!-- 2. Root Cause -->
+                            <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                                <h4 class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
+                                    <i class="fa-solid fa-brain text-amber-600"></i> 2. Root Cause (Akar Masalah)
+                                </h4>
+                                <div id="execRootCause" class="space-y-1.5 leading-relaxed text-slate-600">
+                                    <!-- Injected by JS -->
+                                </div>
+                            </div>
+
+                            <!-- 3. Rekomendasi Tindakan -->
+                            <div class="border border-slate-100 rounded-lg p-3 bg-white shadow-2xs">
+                                <h4 class="font-bold text-emerald-900 mb-1.5 flex items-center gap-1">
+                                    <i class="fa-solid fa-list-check text-emerald-600"></i> 3. Rekomendasi Action Plan
+                                </h4>
+                                <ol id="execActionPlan" class="list-decimal list-inside space-y-1.5 leading-relaxed text-slate-600">
+                                    <!-- Injected by JS -->
+                                </ol>
+                            </div>
                         </div>
                     </div>
-                    <div class="chart-wrapper flex-grow" id="wrap-asset"><canvas id="assetChart"></canvas></div>
-                </div>
-                
-                <!-- CHART 3: CASA -->
-                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-2 gap-1">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">CASA Analysis</h3>
-                        <div id="ctrl-casa" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
-                            <button onclick="setChartRank('casa', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
-                            <button onclick="setChartRank('casa', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
-                            <button onclick="setChartRank('casa', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
-                        </div>
-                    </div>
-                    <div class="chart-wrapper flex-grow" id="wrap-casa"><canvas id="casaChart"></canvas></div>
                 </div>
 
-                <!-- CHART 4: FDR -->
-                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-2 gap-1">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Financing & FDR Ratio</h3>
-                        <div id="ctrl-fdr" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
-                            <button onclick="setChartRank('fdr', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
-                            <button onclick="setChartRank('fdr', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
-                            <button onclick="setChartRank('fdr', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                <!-- Charts Grid -->
+                <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 transition-all duration-300">
+                    
+                    <!-- CHART 1: PBT -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-2 gap-1">
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-700">Profit Before Tax After HOCA</h3>
+                            <div id="ctrl-pbt" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                                <button onclick="setChartRank('pbt', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                                <button onclick="setChartRank('pbt', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                                <button onclick="setChartRank('pbt', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            </div>
                         </div>
+                        <div class="chart-wrapper flex-grow" id="wrap-pbt"><canvas id="pbtChart"></canvas></div>
                     </div>
-                    <div class="chart-wrapper flex-grow" id="wrap-fdr"><canvas id="fdrChart"></canvas></div>
+
+                    <!-- CHART 2: ASSET -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-2 gap-1">
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-700">Asset Performance</h3>
+                            <div id="ctrl-asset" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                                <button onclick="setChartRank('asset', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                                <button onclick="setChartRank('asset', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                                <button onclick="setChartRank('asset', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper flex-grow" id="wrap-asset"><canvas id="assetChart"></canvas></div>
+                    </div>
+                    
+                    <!-- CHART 3: CASA -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-2 gap-1">
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-700">CASA Analysis</h3>
+                            <div id="ctrl-casa" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                                <button onclick="setChartRank('casa', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                                <button onclick="setChartRank('casa', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                                <button onclick="setChartRank('casa', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper flex-grow" id="wrap-casa"><canvas id="casaChart"></canvas></div>
+                    </div>
+
+                    <!-- CHART 4: FDR -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-2 gap-1">
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-700">Financing & FDR Ratio</h3>
+                            <div id="ctrl-fdr" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                                <button onclick="setChartRank('fdr', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                                <button onclick="setChartRank('fdr', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                                <button onclick="setChartRank('fdr', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper flex-grow" id="wrap-fdr"><canvas id="fdrChart"></canvas></div>
+                    </div>
+
+                    <!-- CHART 5: FBI -->
+                    <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-2 gap-1">
+                            <h3 class="text-xs sm:text-sm font-bold text-slate-700">Fee Based Income</h3>
+                            <div id="ctrl-fbi" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                                <button onclick="setChartRank('fbi', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
+                                <button onclick="setChartRank('fbi', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
+                                <button onclick="setChartRank('fbi', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
+                            </div>
+                        </div>
+                        <div class="chart-wrapper flex-grow" id="wrap-fbi"><canvas id="fbiChart"></canvas></div>
+                    </div>
                 </div>
 
-                <!-- CHART 5: FBI -->
-                <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col h-full">
-                    <div class="flex justify-between items-center mb-2 gap-1">
-                        <h3 class="text-xs sm:text-sm font-bold text-slate-700">Fee Based Income</h3>
-                        <div id="ctrl-fbi" class="hidden bg-gray-100 rounded-lg p-0.5 flex text-[9px] sm:text-[10px] font-medium">
-                            <button onclick="setChartRank('fbi', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
-                            <button onclick="setChartRank('fbi', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
-                            <button onclick="setChartRank('fbi', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
-                        </div>
+                <div id="tableSection" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                    <div class="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
                     </div>
-                    <div class="chart-wrapper flex-grow" id="wrap-fbi"><canvas id="fbiChart"></canvas></div>
+                    <div class="overflow-x-auto max-h-[400px]">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-white sticky top-0 z-10 shadow-sm">
+                                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border-b border-gray-200">
+                                    <th class="p-2 sm:p-3 font-bold sticky left-0 bg-white z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">PBT Act</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right text-red-500">Gap PBT</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Asset Act</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Gap Asset</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">CASA %</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Act CASA</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Gap CASA</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">COF %</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">FDR %</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Act Financing</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Gap Financing</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">FBI Act</th>
+                                    <th class="p-2 sm:p-3 font-bold text-right">Gap FBI</th>
+                                    <th class="p-2 sm:p-3 font-bold text-center">PPAP/YTD</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-
-            <div id="tableSection" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-                <div class="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
-                </div>
-                <div class="overflow-x-auto max-h-[400px]">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-white sticky top-0 z-10 shadow-sm">
-                            <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border-b border-gray-200">
-                                <th class="p-2 sm:p-3 font-bold sticky left-0 bg-white z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">PBT Act</th>
-                                <th class="p-2 sm:p-3 font-bold text-right text-red-500">Gap PBT</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Asset Act</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Gap Asset</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">CASA %</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Act CASA</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Gap CASA</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">COF %</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">FDR %</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Act Financing</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Gap Financing</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">FBI Act</th>
-                                <th class="p-2 sm:p-3 font-bold text-right">Gap FBI</th>
-                                <th class="p-2 sm:p-3 font-bold text-center">PPAP/YTD</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
+                <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
             </div>
         </div>
-        <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
     </div>
-	</div>
 
     <script>
         let rawData = [];
@@ -1359,9 +1360,9 @@
             }
         }
         
-        <!-- ============================================ -->
-        <!-- AUTH GATE: cek login yang dikirim dari index2.html -->
-        <!-- ============================================ -->
+        /* ============================================ */
+        /* AUTH GATE: cek login yang dikirim dari index2.html */
+        /* ============================================ */
         (function () {
             var LOGIN_PAGE_URL = 'https://bmisumatera.vercel.app/index.html';
             var SESSION_KEY = 'mpbt_auth_nik';
