@@ -909,7 +909,7 @@
                     <span class="font-bold text-slate-800 whitespace-nowrap">${fmtFn(valueFn(d))}</span>
                 </div>
             `).join('');
-            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>${rows}`;
+            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>${rows}`;
             container.classList.remove('hidden');
         }
 
@@ -1057,7 +1057,7 @@
                 renderTop3('top3CASA', data, d => d.casaPct, v => v.toFixed(1) + '%');
                 renderTop3('top3FDR', data, d => d.fdrPct, v => v.toFixed(1) + '%');
                 renderTop3('top3FBI', data, d => d.fbi, v => fmt(v));
-                renderTop3PositiveGap('top3GapPBT', data, d => d.pbt - d.tgtPbt, v => fmt(v), '✅ Top 3 Gap Positif');
+                renderTop3PositiveGap('top3GapPBT', data, d => d.pbt - d.tgtPbt, v => fmt(v), '✅ Top 3 Profit Branches');
 
             } else {
                 posNegContainer.classList.add('hidden');
