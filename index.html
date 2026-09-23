@@ -318,7 +318,10 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntPbtNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3PBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>
+                            </div>
+                            <div id="top3GapPBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
+                                <p class="text-gray-400 font-bold mb-0.5">✅ Top 3 Gap Positif</p>
                             </div>
                         </div>
                     </div>
@@ -340,7 +343,7 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntAssetNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3Asset" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>
                             </div>
                         </div>
                     </div>
@@ -375,7 +378,7 @@
                                 <div class="flex justify-between"><span class="text-orange-500">⚠️ COF >2.3%</span> <span id="cntCofNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3CASA" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>
                             </div>
                         </div>
                     </div>
@@ -397,7 +400,7 @@
                                 <div class="flex justify-between"><span class="text-orange-500">⚠️ <30%</span> <span id="cntFdrNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3FDR" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>
                             </div>
                         </div>
                     </div>
@@ -419,7 +422,7 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntFbiNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3FBI" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>
                             </div>
                         </div>
                     </div>
@@ -669,7 +672,7 @@
                     if (exists) {
                         targetBranch = keepBranch;
                     } else {
-                        console.warn(`Branch ${keepBranch} tidak ditemukan di data ${currentPeriodId}`);
+                        console.warn(`Cabang ${keepBranch} tidak ditemukan di data ${currentPeriodId}`);
                         targetBranch = 'ALL'; 
                     }
                 }
@@ -697,7 +700,7 @@
                 var displayName = user.nama || 'User';
                 
                 var userPos = user.posisi || '-';
-                var userLoc = user.lokasi || user.region || user.Branch || '';
+                var userLoc = user.lokasi || user.region || user.cabang || '';
                 var displayPos = userPos;
 
                 function getInitials(name) {
@@ -906,7 +909,27 @@
                     <span class="font-bold text-slate-800 whitespace-nowrap">${fmtFn(valueFn(d))}</span>
                 </div>
             `).join('');
-            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>${rows}`;
+            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Cabang</p>${rows}`;
+            container.classList.remove('hidden');
+        }
+
+        function renderTop3PositiveGap(elementId, data, valueFn, fmtFn, label) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            const positives = (data || []).filter(d => valueFn(d) > 0);
+            if (positives.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+            const medals = ['🥇', '🥈', '🥉'];
+            const top3 = [...positives].sort((a, b) => valueFn(b) - valueFn(a)).slice(0, 3);
+            const rows = top3.map((d, i) => `
+                <div class="flex justify-between items-center gap-1">
+                    <span class="text-slate-600 truncate" title="${d.name}">${medals[i]} ${d.name}</span>
+                    <span class="font-bold text-green-600 whitespace-nowrap">+${fmtFn(valueFn(d))}</span>
+                </div>
+            `).join('');
+            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">${label}</p>${rows}`;
             container.classList.remove('hidden');
         }
 
@@ -1028,12 +1051,13 @@
                 document.getElementById('statusPPAP').className = "text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-600 block text-center";
                 document.getElementById('iconPPAP').innerHTML = highRisk === 0 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
 
-                // Top 3 Branches TERTINGGI PER KPI (khusus Region Sumatera / ALL)
+                // TOP 3 CABANG TERTINGGI PER KPI (khusus Region Sumatera / ALL)
                 renderTop3('top3PBT', data, d => d.pbt, v => fmt(v));
                 renderTop3('top3Asset', data, d => d.asset, v => fmt(v));
                 renderTop3('top3CASA', data, d => d.casaPct, v => v.toFixed(1) + '%');
                 renderTop3('top3FDR', data, d => d.fdrPct, v => v.toFixed(1) + '%');
                 renderTop3('top3FBI', data, d => d.fbi, v => fmt(v));
+                renderTop3PositiveGap('top3GapPBT', data, d => d.pbt - d.tgtPbt, v => fmt(v), '✅ Top 3 Gap Positif');
 
             } else {
                 posNegContainer.classList.add('hidden');
@@ -1041,6 +1065,8 @@
                     const el = document.getElementById(id);
                     if (el) el.classList.add('hidden');
                 });
+                const top3GapEl = document.getElementById('top3GapPBT');
+                if (top3GapEl) top3GapEl.classList.add('hidden');
                 const d = data[0] || {};
                 document.getElementById('iconPBT').innerHTML = d.pbt >= d.tgtPbt ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
                 document.getElementById('iconAsset').innerHTML = d.asset >= d.tgtAsset ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
@@ -1096,11 +1122,11 @@
                 const pbtStatus = gapPBT >= 0 ? "memenuhi target" : "mengalami defisit signifikan";
                 healthP1 = `<strong>Profitabilitas & Profit Before Tax:</strong> Profit regional mencapai IDR ${fmt(totalPBT)} (${pbtStatus} dengan GAP IDR ${fmt(gapPBT)} vs target IDR ${fmt(totalTgtPBT)}).`;
                 healthP2 = `<strong>Struktur Pendanaan & Likuiditas:</strong> Rata-rata CASA Ratio berada di level ${avgCASA.toFixed(1)}% dengan Cost of Fund (COF) terkendali di ${avgCOF.toFixed(2)}%, namun penyaluran pembiayaan (FDR ${calcFDR.toFixed(1)}%) masih tergolong rendah di bawah standar optimalisasi.`;
-                healthP3 = `<strong>Kualitas Aset & Risiko (PPAP):</strong> Terdapat ${ppapIssueCount} Branch dengan rasio PPAP/YTD > 1% yang memerlukan intervensi penanganan risiko secara intensif.`;
+                healthP3 = `<strong>Kualitas Aset & Risiko (PPAP):</strong> Terdapat ${ppapIssueCount} cabang dengan rasio PPAP/YTD > 1% yang memerlukan intervensi penanganan risiko secara intensif.`;
             } else {
                 const d = data[0] || {};
                 const pbtStatus = d.pbt >= d.tgtPbt ? "ACHIEVED" : "UNDERPERFORM";
-                healthP1 = `<strong>Profitabilitas Branch (${d.name}):</strong> Status PBT ${pbtStatus} (PBT Act: IDR ${fmt(d.pbt)} vs Target: IDR ${fmt(d.tgtPbt)} | Gap: IDR ${fmt(d.pbt - d.tgtPbt)}).`;
+                healthP1 = `<strong>Profitabilitas Cabang (${d.name}):</strong> Status PBT ${pbtStatus} (PBT Act: IDR ${fmt(d.pbt)} vs Target: IDR ${fmt(d.tgtPbt)} | Gap: IDR ${fmt(d.pbt - d.tgtPbt)}).`;
                 healthP2 = `<strong>Efisiensi Pendanaan & FDR:</strong> Rasio CASA tercatat ${d.casaPct}% (COF ${d.cof.toFixed(2)}%) dengan FDR sebesar ${d.fdrPct}%.`;
                 healthP3 = `<strong>Tingkat Risiko Pembiayaan:</strong> Tingkat PPAP/YTD tercatat ${d.ppap}% (${d.ppap > 1 ? "Perlu Pengawasan Khusus / Warning" : "Aman & Terkendali"}).`;
             }
@@ -1138,7 +1164,7 @@
             }
 
             if (ppapIssueCount > 0) {
-                rcHTML += `<p>• <strong>Tekanan Beban Cadangan (PPAP):</strong> Adanya NPF/kualitas pembiayaan di ${ppapIssueCount} Branch yang memicu pencadangan tinggi.</p>`;
+                rcHTML += `<p>• <strong>Tekanan Beban Cadangan (PPAP):</strong> Adanya NPF/kualitas pembiayaan di ${ppapIssueCount} cabang yang memicu pencadangan tinggi.</p>`;
             } else {
                 rcHTML += `<p>• <strong>Risiko Kualitas Aset Rendah:</strong> Beban PPAP terkendali di bawah threshold 1%.</p>`;
             }
@@ -1147,7 +1173,7 @@
             let actionHTML = "";
             actionHTML += `<li><strong>Gencarkan Pemasaran Pembiayaan Berkualitas:</strong> Tingkatkan ekspansi pembiayaan sehat untuk menaikkan rasio FDR ke target ideal dan mendongkrak margin laba bersih.</li>`;
             actionHTML += `<li><strong>Akselerasi Cross-Selling & Transaction Banking:</strong> Dorong peningkatkan FBI melalui layanan digital, remittance, serta produk wealth/bancassurance guna menutup gap fee.</li>`;
-            actionHTML += `<li><strong>Pengetatan Restrukturisasi & Recovery NPF:</strong> Lakukan tindakan mitigasi khusus pada unit/Branch dengan PPAP > 1% untuk menurunkan beban pencadangan dan memperbaiki Bottom-Line PBT.</li>`;
+            actionHTML += `<li><strong>Pengetatan Restrukturisasi & Recovery NPF:</strong> Lakukan tindakan mitigasi khusus pada unit/cabang dengan PPAP > 1% untuk menurunkan beban pencadangan dan memperbaiki Bottom-Line PBT.</li>`;
 
             document.getElementById('execActionPlan').innerHTML = actionHTML;
         }
