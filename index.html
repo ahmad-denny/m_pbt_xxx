@@ -250,7 +250,7 @@
                             <!-- Text Container -->
                             <div>
                                 <h1 class="text-base sm:text-lg font-bold tracking-wide leading-tight text-slate-900" id="headerTitle">
-                                    CONTRIBUTION MARGIN <br>[JUNI 2026]
+                                    CONTRIBUTION MARGIN <br>JUNI 2026
                                 </h1>
                                 <p class="text-[10px] sm:text-xs text-slate-500 sm:block">
                                     PBT After HOCA • Asset • CASA Ratio • FDR • FBI • PPAP
@@ -1349,7 +1349,7 @@
             const titleEl = document.getElementById('headerTitle');
             const config = jsonFiles.find(f => f.id === currentPeriodId);
             const monthName = config ? config.label.toUpperCase() : 'DATA';
-            titleEl.innerText = `CONTRIBUTION MARGIN\n[${monthName} 2026]`;
+            titleEl.innerText = `CONTRIBUTION MARGIN\n${monthName} 2026`;
         }
 
         function updateHeaderSubtitle() {
