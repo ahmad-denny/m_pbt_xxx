@@ -318,7 +318,7 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntPbtNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3PBT" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
                             </div>
                         </div>
                     </div>
@@ -340,7 +340,7 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntAssetNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3Asset" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
                             </div>
                         </div>
                     </div>
@@ -375,7 +375,7 @@
                                 <div class="flex justify-between"><span class="text-orange-500">⚠️ COF >2.3%</span> <span id="cntCofNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3CASA" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
                             </div>
                         </div>
                     </div>
@@ -397,7 +397,7 @@
                                 <div class="flex justify-between"><span class="text-orange-500">⚠️ <30%</span> <span id="cntFdrNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3FDR" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
                             </div>
                         </div>
                     </div>
@@ -419,7 +419,7 @@
                                 <div class="flex justify-between"><span class="text-red-500">⚠️ Failed</span> <span id="cntFbiNo" class="font-bold">0</span></div>
                             </div>
                             <div id="top3FBI" class="mt-1.5 pt-1.5 border-t border-dashed border-gray-200 hidden">
-                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>
+                                <p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>
                             </div>
                         </div>
                     </div>
@@ -906,7 +906,7 @@
                     <span class="font-bold text-slate-800 whitespace-nowrap">${fmtFn(valueFn(d))}</span>
                 </div>
             `).join('');
-            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branch</p>${rows}`;
+            container.innerHTML = `<p class="text-gray-400 font-bold mb-0.5">🏆 Top 3 Branches</p>${rows}`;
             container.classList.remove('hidden');
         }
 
@@ -1028,7 +1028,7 @@
                 document.getElementById('statusPPAP').className = "text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded bg-gray-100 text-gray-600 block text-center";
                 document.getElementById('iconPPAP').innerHTML = highRisk === 0 ? '<i class="fa-solid fa-circle-check text-green-500"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
 
-                // TOP 3 Branch TERTINGGI PER KPI (khusus Region Sumatera / ALL)
+                // Top 3 Branches TERTINGGI PER KPI (khusus Region Sumatera / ALL)
                 renderTop3('top3PBT', data, d => d.pbt, v => fmt(v));
                 renderTop3('top3Asset', data, d => d.asset, v => fmt(v));
                 renderTop3('top3CASA', data, d => d.casaPct, v => v.toFixed(1) + '%');
