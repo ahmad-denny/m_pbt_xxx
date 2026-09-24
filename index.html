@@ -585,55 +585,32 @@
 				        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
 				    </div>
 				
-				    <!-- 1. HEADER (Fixed di atas) -->
-				    <div class="overflow-hidden border-b border-gray-200">
-				        <table class="w-full text-left border-collapse table-fixed min-w-[1200px]">
-				            <thead class="bg-white">
-				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">
-				                    <th class="p-2 sm:p-3 font-bold w-[160px] sticky left-0 bg-white z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">PBT Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right text-red-500 w-[90px]">Gap PBT</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">Asset Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">Gap Asset</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[80px]">CASA %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">Act CASA</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">Gap CASA</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[80px]">COF %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[80px]">FDR %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[110px]">Act Financing</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[110px]">Gap Financing</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">FBI Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right w-[90px]">Gap FBI</th>
-				                    <th class="p-2 sm:p-3 font-bold text-center w-[90px]">PPAP/YTD</th>
+				    <!-- Cukup gunakan 1 pembungkus ini yang menangani scroll horizontal & vertikal -->
+				    <div class="overflow-auto max-h-[400px]">
+				        <table class="w-full text-left border-collapse min-w-[1000px]">
+				            <thead class="bg-white sticky top-0 z-20 shadow-sm">
+				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border-b border-gray-200">
+				                    <!-- Kolom Branch Name dibikin Sticky Kiri & Sticky Atas (z-30) agar tidak tertutup saat discroll -->
+				                    <th class="p-2 sm:p-3 font-bold sticky left-0 top-0 bg-white z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">PBT Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right text-red-500 bg-white">Gap PBT</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Asset Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Asset</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">CASA %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act CASA</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap CASA</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">COF %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FDR %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act Financing</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Financing</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FBI Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap FBI</th>
+				                    <th class="p-2 sm:p-3 font-bold text-center bg-white">PPAP/YTD</th>
 				                </tr>
 				            </thead>
-				        </table>
-				    </div>
-				
-				    <!-- 2. DATA / BODY (Scrollbar Horizontal Tepat di Bawah Header) -->
-				    <div class="overflow-auto max-h-[400px]">
-				        <table class="w-full text-left border-collapse table-fixed min-w-[1200px]">
 				            <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
-				                <!-- SAAT RENDER DATA VIA JAVASCRIPT, PASTIKAN CLASS DAN LEBAR SETIAP <td... /> PERSIS SEPERTI INI: -->
-				                <!-- 
-				                <tr class="hover:bg-gray-50">
-				                    <td class="p-2 sm:p-3 font-bold w-[160px] sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] truncate">PEKANBARU</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">2.407</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px] text-red-500">-2.974</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">324.572</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">122.767</td>
-				                    <td class="p-2 sm:p-3 text-right w-[80px]">55.7%</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">180.715</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">-14.028</td>
-				                    <td class="p-2 sm:p-3 text-right w-[80px]">2.50%</td>
-				                    <td class="p-2 sm:p-3 text-right w-[80px]">33%</td>
-				                    <td class="p-2 sm:p-3 text-right w-[110px]">107.557</td>
-				                    <td class="p-2 sm:p-3 text-right w-[110px]">10.185</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">1.039</td>
-				                    <td class="p-2 sm:p-3 text-right w-[90px]">-333</td>
-				                    <td class="p-2 sm:p-3 text-center w-[90px]">1.9%</td>
-				                </tr>
-				                -->
+				                <!-- Saat render baris tabel (TD) via JavaScript, pastikan TD pertama (Branch Name) juga memiliki class sticky: -->
+				                <!-- <td class="p-2 sm:p-3 font-bold sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">PEKANBARU</td> -->
 				            </tbody>
 				        </table>
 				    </div>
