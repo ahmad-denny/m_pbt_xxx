@@ -192,8 +192,22 @@
 		table:last-child {
 		    margin-bottom: 0px !important;
 		}		
-        
-    </style>
+
+		#tableSection .overflow-auto {
+		    max-height: 400px;
+		    overflow-y: auto;
+		    overflow-x: auto;
+		}
+		
+		/* Header tabel tetap terlihat saat scroll */
+		#tableSection thead {
+		    position: sticky;
+		    top: 0;
+		    z-index: 10;
+		    background: white;
+		}		
+ 
+	</style>
 </head>
 <body class="text-gray-800 overflow-hidden" id="mainBody">
 
@@ -588,7 +602,7 @@
 				    <!-- Cukup gunakan 1 pembungkus ini yang menangani scroll horizontal & vertikal -->
 				    <div class="overflow-auto max-h-[400px]">
 				        <table class="w-full text-left border-collapse min-w-[1000px]">
-				            <thead class="bg-white sticky top-0 z-20 shadow-sm">
+				            <thead class="sticky top-0 z-20 bg-white shadow-sm">
 				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider border-b border-gray-200">
 				                    <!-- Kolom Branch Name dibikin Sticky Kiri & Sticky Atas (z-30) agar tidak tertutup saat discroll -->
 				                    <th class="p-2 sm:p-3 font-bold sticky left-0 top-0 bg-white z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
