@@ -585,37 +585,54 @@
 				        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
 				    </div>
 				
-				    <!-- Cukup 1 Pembungkus ini untuk Scroll Horizontal sekaligus Scroll Vertikal -->
-				    <div class="overflow-auto max-h-[400px]">
-				        <table class="w-full text-left border-collapse min-w-[1000px]">
-				            <!-- Header dibuat Sticky ke Atas -->
-				            <thead class="bg-white sticky top-0 z-20 shadow-[0_1px_0_0_rgba(0,0,0,0.1)]">
-				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">
-				                    <!-- Kolom Branch Name: Sticky Kiri (z-30) & Sticky Atas -->
-				                    <th class="p-2 sm:p-3 font-bold sticky left-0 top-0 bg-white z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">PBT Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right text-red-500 bg-white">Gap PBT</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Asset Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Asset</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">CASA %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act CASA</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap CASA</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">COF %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FDR %</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act Financing</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Financing</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FBI Act</th>
-				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap FBI</th>
-				                    <th class="p-2 sm:p-3 font-bold text-center bg-white">PPAP/YTD</th>
-				                </tr>
-				            </thead>
-				            <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
-				                <!-- Pastikan saat render TD via JavaScript: -->
-				                <!-- TD pertama (Branch Name) diberi class: sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] -->
-				            </tbody>
-				        </table>
+				    <!-- Container Utama Scroll Horizontal -->
+				    <div class="overflow-x-auto">
+				        <div class="w-max min-w-full">
+				            
+				            <!-- 1. HEADER TABLE (Tetap di atas, tidak terkena scrollbar vertikal) -->
+				            <table class="w-full text-left border-collapse table-fixed">
+				                <thead class="bg-white border-b border-gray-200">
+				                    <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider flex">
+				                        <th class="p-2 sm:p-3 font-bold bg-white w-[160px] shrink-0 sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">PBT Act</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right text-red-500 bg-white w-[100px] shrink-0">Gap PBT</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Asset Act</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Gap Asset</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">CASA %</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Act CASA</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Gap CASA</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">COF %</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">FDR %</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Act Financing</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Gap Financing</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">FBI Act</th>
+				                        <th class="p-2 sm:p-3 font-bold text-right bg-white w-[100px] shrink-0">Gap FBI</th>
+				                        <th class="p-2 sm:p-3 font-bold text-center bg-white w-[100px] shrink-0">PPAP/YTD</th>
+				                    </tr>
+				                </thead>
+				            </table>
+				
+				            <!-- 2. BODY TABLE CONTAINER (Scrollbar Vertikal hanya ada di sini) -->
+				            <div class="max-h-[400px] overflow-y-auto">
+				                <table class="w-full text-left border-collapse table-fixed">
+				                    <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
+				                        <!-- Format Render Data via JavaScript Harus Menggunakan Class Lebar Yang Sama: -->
+				                        <!-- 
+				                        <tr class="flex">
+				                            <td class="p-2 sm:p-3 font-bold bg-white w-[160px] shrink-0 sticky left-0 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">PEKANBARU</td>
+				                            <td class="p-2 sm:p-3 text-right w-[100px] shrink-0">...</td>
+				                            <td class="p-2 sm:p-3 text-right w-[100px] shrink-0">...</td>
+				                            ...dst
+				                        </tr>
+				                        -->
+				                    </tbody>
+				                </table>
+				            </div>
+				
+				        </div>
 				    </div>
-				</div>				
+				</div>
+				
 				<!--
                 <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
 				-->
