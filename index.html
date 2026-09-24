@@ -585,46 +585,37 @@
 				        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
 				    </div>
 				
-				    <!-- Pembungkus Scroll Horizontal Utama -->
-				    <div class="overflow-x-auto">
-				        <div class="min-w-[1000px]">
-				            
-				            <!-- Table Header (Tetap / Diam) -->
-				            <table class="w-full text-left border-collapse border-b border-gray-200">
-				                <thead class="bg-white">
-				                    <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">
-				                        <th class="p-2 sm:p-3 font-bold sticky left-0 bg-white z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">PBT Act</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right text-red-500 bg-white">Gap PBT</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Asset Act</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Asset</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">CASA %</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Act CASA</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap CASA</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">COF %</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">FDR %</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Act Financing</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Financing</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">FBI Act</th>
-				                        <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap FBI</th>
-				                        <th class="p-2 sm:p-3 font-bold text-center bg-white">PPAP/YTD</th>
-				                    </tr>
-				                </thead>
-				            </table>
-				
-				            <!-- Container Khusus Scroll Vertikal (Scrollbar Posisi di Sini) -->
-				            <div class="max-h-[400px] overflow-y-auto">
-				                <table class="w-full text-left border-collapse">
-				                    <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
-				                        <!-- Data Render JS -->
-				                    </tbody>
-				                </table>
-				            </div>
-				
-				        </div>
+				    <!-- Cukup 1 Pembungkus ini untuk Scroll Horizontal sekaligus Scroll Vertikal -->
+				    <div class="overflow-auto max-h-[400px]">
+				        <table class="w-full text-left border-collapse min-w-[1000px]">
+				            <!-- Header dibuat Sticky ke Atas -->
+				            <thead class="bg-white sticky top-0 z-20 shadow-[0_1px_0_0_rgba(0,0,0,0.1)]">
+				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">
+				                    <!-- Kolom Branch Name: Sticky Kiri (z-30) & Sticky Atas -->
+				                    <th class="p-2 sm:p-3 font-bold sticky left-0 top-0 bg-white z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">PBT Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right text-red-500 bg-white">Gap PBT</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Asset Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Asset</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">CASA %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act CASA</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap CASA</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">COF %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FDR %</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Act Financing</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap Financing</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">FBI Act</th>
+				                    <th class="p-2 sm:p-3 font-bold text-right bg-white">Gap FBI</th>
+				                    <th class="p-2 sm:p-3 font-bold text-center bg-white">PPAP/YTD</th>
+				                </tr>
+				            </thead>
+				            <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
+				                <!-- Pastikan saat render TD via JavaScript: -->
+				                <!-- TD pertama (Branch Name) diberi class: sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] -->
+				            </tbody>
+				        </table>
 				    </div>
-				</div>
-				
+				</div>				
 				<!--
                 <div class="footer">Typing, Create, Update, Repeat | Optimized for Mobile & Web | Theme: Light/Dark | RBPM - Region Sumatera</div>
 				-->
