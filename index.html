@@ -212,7 +212,7 @@
         <!-- Content moved from Header to Sidebar for Mobile -->
         <div class="p-4 space-y-6">
             <!-- User Info Section -->
-            <div class="bg-slate-800 rounded-none p-3 border border-slate-700">
+            <div class="bg-slate-800 rounded-10px p-3 border border-slate-700">
                 <p class="text-xs text-slate-400 uppercase mb-2">Logged in as</p>
                 <div class="flex items-center gap-3">
                     <div id="userAvatarSidebar" class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-sm font-bold text-white shrink-0">U</div>
@@ -256,7 +256,7 @@
                         </button>
                         <div class="flex items-start gap-3">
                             <!-- Logo Container -->
-                            <div class="bg-transparent rounded-none shrink-0 border border-transparent">
+                            <div class="bg-transparent rounded-10px shrink-0 border border-transparent">
                                 <img src="img/BMI.png" alt="Bank Muamalat Logo" class="logo w-8 h-8 object-contain" width="32" height="32">
                             </div>
                         
@@ -277,12 +277,12 @@
                 <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-between">
                     
                     <!-- Desktop Tabs (Hidden on Mobile, moved to Sidebar) -->
-                    <div id="tabContainer" class="hidden md:flex bg-slate-100 rounded-none p-1 border border-slate-200 overflow-x-auto max-w-full">
+                    <div id="tabContainer" class="hidden md:flex bg-slate-100 rounded-10px p-1 border border-slate-200 overflow-x-auto max-w-full">
                         <!-- Tabs injected by JS -->
                     </div>
                     <!-- Branch Filter -->
-                    <div class="flex items-center justify-end bg-transparent rounded-none p-1 border border-transparent flex-1 sm:flex-none w-full md:w-auto">
-                        <select id="branchFilter" class="bg-white text-slate-800 text-xs sm:text-sm rounded-none border border-slate-300 focus:ring-2 focus:ring-violet-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px] shadow-2xs font-medium">
+                    <div class="flex items-center justify-end bg-transparent rounded-10px p-1 border border-transparent flex-1 sm:flex-none w-full md:w-auto">
+                        <select id="branchFilter" class="bg-white text-slate-800 text-xs sm:text-sm rounded-10px border border-slate-300 focus:ring-2 focus:ring-violet-500 py-1.5 px-2 sm:px-3 outline-none cursor-pointer w-full sm:min-w-[180px] shadow-2xs font-medium">
                             <option value="ALL">📊 REGION SUMATERA</option>
                         </select>
                     </div>
@@ -310,7 +310,7 @@
             <div class="container mx-auto px-3 sm:px-6 py-4 sm:py-6">
                 <!-- Cards Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 mb-6 items-stretch">            
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-violet-600 relative overflow-hidden">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-violet-600 relative overflow-hidden">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPBT"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div>
@@ -339,7 +339,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-emerald-500 relative overflow-hidden">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-emerald-500 relative overflow-hidden">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconAsset"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div>
@@ -361,7 +361,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-rose-500 relative overflow-hidden">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-rose-500 relative overflow-hidden">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconCASA"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div class="w-full">
@@ -396,7 +396,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-amber-500 relative overflow-hidden">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-amber-500 relative overflow-hidden">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFDR"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div>
@@ -418,7 +418,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-violet-500 relative overflow-hidden h-full flex flex-col">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconFBI"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div>
@@ -440,7 +440,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-white p-2.5 sm:p-3 rounded-none shadow-sm border-t-4 sm:border-t-4 border-l-2 border-fuchsia-500 relative overflow-hidden">
+                    <div class="card bg-white p-2.5 sm:p-3 rounded-10px shadow-sm border-t-4 sm:border-t-4 border-l-2 border-fuchsia-500 relative overflow-hidden">
                         <div class="absolute top-2 right-2 sm:top-3 sm:right-3 text-lg sm:text-xl" id="iconPPAP"></div>
                         <div class="flex justify-between items-start pr-6 sm:pr-8">
                             <div>
@@ -460,15 +460,15 @@
                 </div>
 
                 <!-- EXECUTIVE MANAGEMENT REVIEW SUMMARY SECTION -->
-                <div id="executiveSummaryContainer" class="bg-white rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white p-4 sm:p-5 mb-6">
+                <div id="executiveSummaryContainer" class="bg-white rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white p-4 sm:p-5 mb-6">
                     <div class="flex items-center gap-2 mb-3 border-b border-slate-100 pb-2">
-                        <div class="p-1.5 bg-violet-900 text-white rounded-none"><i class="fa-solid fa-chart-line text-sm"></i></div>
+                        <div class="p-1.5 bg-violet-900 text-white rounded-10px"><i class="fa-solid fa-chart-line text-sm"></i></div>
                         <h2 class="text-sm sm:text-base font-bold text-slate-800">Ringkasan Eksekutif & Review Manajemen</h2>
                     </div>
                     
                     <div class="space-y-4 text-xs sm:text-sm text-slate-700">
                         <!-- Status Kesehatan Bisnis -->
-                        <div class="bg-slate-50 p-3 rounded-none border border-slate-100">
+                        <div class="bg-slate-50 p-3 rounded-10px border border-slate-100">
                             <h3 class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
                                 <i class="fa-solid fa-heart-pulse text-rose-500"></i> Status Kesehatan Bisnis Saat Ini
                             </h3>
@@ -479,7 +479,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <!-- 1. Analisis Kinerja & Tren -->
-                            <div class="border border-slate-100 rounded-none p-3 bg-white shadow-2xs">
+                            <div class="border border-slate-100 rounded-10px p-3 bg-white shadow-2xs">
                                 <h4 class="font-bold text-violet-900 mb-1.5 flex items-center gap-1">
                                     <i class="fa-solid fa-magnifying-glass-chart text-violet-600"></i> 1. Analisis Kinerja & Tren
                                 </h4>
@@ -489,7 +489,7 @@
                             </div>
 
                             <!-- 2. Root Cause -->
-                            <div class="border border-slate-100 rounded-none p-3 bg-white shadow-2xs">
+                            <div class="border border-slate-100 rounded-10px p-3 bg-white shadow-2xs">
                                 <h4 class="font-bold text-amber-900 mb-1.5 flex items-center gap-1">
                                     <i class="fa-solid fa-brain text-amber-600"></i> 2. Root Cause (Akar Masalah)
                                 </h4>
@@ -499,7 +499,7 @@
                             </div>
 
                             <!-- 3. Rekomendasi Tindakan -->
-                            <div class="border border-slate-100 rounded-none p-3 bg-white shadow-2xs">
+                            <div class="border border-slate-100 rounded-10px p-3 bg-white shadow-2xs">
                                 <h4 class="font-bold text-emerald-900 mb-1.5 flex items-center gap-1">
                                     <i class="fa-solid fa-list-check text-emerald-600"></i> 3. Rekomendasi Action Plan
                                 </h4>
@@ -515,10 +515,10 @@
                 <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 transition-all duration-300">
                     
                     <!-- CHART 1: PBT -->
-                    <div class="bg-white p-3 sm:p-4 rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
+                    <div class="bg-white p-3 sm:p-4 rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
                         <div class="flex justify-between items-center mb-2 gap-1">
                             <h3 class="text-xs sm:text-sm font-bold text-slate-700">Profit Before Tax After HOCA</h3>
-                            <div id="ctrl-pbt" class="hidden bg-gray-100 rounded-none p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <div id="ctrl-pbt" class="hidden bg-gray-100 rounded-10px p-0.5 flex text-[9px] sm:text-[10px] font-medium">
                                 <button onclick="setChartRank('pbt', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
                                 <button onclick="setChartRank('pbt', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
                                 <button onclick="setChartRank('pbt', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
@@ -528,10 +528,10 @@
                     </div>
 
                     <!-- CHART 2: ASSET -->
-                    <div class="bg-white p-3 sm:p-4 rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
+                    <div class="bg-white p-3 sm:p-4 rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
                         <div class="flex justify-between items-center mb-2 gap-1">
                             <h3 class="text-xs sm:text-sm font-bold text-slate-700">Asset Performance</h3>
-                            <div id="ctrl-asset" class="hidden bg-gray-100 rounded-none p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <div id="ctrl-asset" class="hidden bg-gray-100 rounded-10px p-0.5 flex text-[9px] sm:text-[10px] font-medium">
                                 <button onclick="setChartRank('asset', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
                                 <button onclick="setChartRank('asset', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
                                 <button onclick="setChartRank('asset', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
@@ -541,10 +541,10 @@
                     </div>
                     
                     <!-- CHART 3: CASA -->
-                    <div class="bg-white p-3 sm:p-4 rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
+                    <div class="bg-white p-3 sm:p-4 rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
                         <div class="flex justify-between items-center mb-2 gap-1">
                             <h3 class="text-xs sm:text-sm font-bold text-slate-700">CASA Analysis</h3>
-                            <div id="ctrl-casa" class="hidden bg-gray-100 rounded-none p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <div id="ctrl-casa" class="hidden bg-gray-100 rounded-10px p-0.5 flex text-[9px] sm:text-[10px] font-medium">
                                 <button onclick="setChartRank('casa', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
                                 <button onclick="setChartRank('casa', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
                                 <button onclick="setChartRank('casa', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
@@ -554,10 +554,10 @@
                     </div>
 
                     <!-- CHART 4: FDR -->
-                    <div class="bg-white p-3 sm:p-4 rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
+                    <div class="bg-white p-3 sm:p-4 rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
                         <div class="flex justify-between items-center mb-2 gap-1">
                             <h3 class="text-xs sm:text-sm font-bold text-slate-700">Financing & FDR Ratio</h3>
-                            <div id="ctrl-fdr" class="hidden bg-gray-100 rounded-none p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <div id="ctrl-fdr" class="hidden bg-gray-100 rounded-10px p-0.5 flex text-[9px] sm:text-[10px] font-medium">
                                 <button onclick="setChartRank('fdr', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
                                 <button onclick="setChartRank('fdr', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
                                 <button onclick="setChartRank('fdr', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
@@ -567,10 +567,10 @@
                     </div>
 
                     <!-- CHART 5: FBI -->
-                    <div class="bg-white p-3 sm:p-4 rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
+                    <div class="bg-white p-3 sm:p-4 rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white flex flex-col h-full">
                         <div class="flex justify-between items-center mb-2 gap-1">
                             <h3 class="text-xs sm:text-sm font-bold text-slate-700">Fee Based Income</h3>
-                            <div id="ctrl-fbi" class="hidden bg-gray-100 rounded-none p-0.5 flex text-[9px] sm:text-[10px] font-medium">
+                            <div id="ctrl-fbi" class="hidden bg-gray-100 rounded-10px p-0.5 flex text-[9px] sm:text-[10px] font-medium">
                                 <button onclick="setChartRank('fbi', 'TOP')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Top 10</button>
                                 <button onclick="setChartRank('fbi', 'BOTTOM')" class="rank-btn px-1.5 sm:px-2 py-0.5 rounded text-slate-600">Bottom 10</button>
                                 <button onclick="setChartRank('fbi', 'ALL')" class="rank-btn active px-1.5 sm:px-2 py-0.5 rounded text-slate-600">All</button>
@@ -580,7 +580,7 @@
                     </div>
                 </div>
 
-				<div id="tableSection" class="bg-white rounded-none shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white overflow-hidden mb-8">
+				<div id="tableSection" class="bg-white rounded-10px shadow-sm border-t-2 sm:border-t-2 border-l-2 border-white overflow-hidden mb-8">
 				    <div class="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
 				        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
 				    </div>
@@ -794,8 +794,8 @@
                 // Mobile Sidebar Button
                 const btnMob = document.createElement('button');
                 btnMob.className = isActive
-                    ? "w-full text-left px-4 py-3 rounded-none bg-violet-600 text-white font-semibold shadow-sm"
-                    : "w-full text-left px-4 py-3 rounded-none text-slate-300 hover:bg-violet-900/60 font-medium";
+                    ? "w-full text-left px-4 py-3 rounded-10px bg-violet-600 text-white font-semibold shadow-sm"
+                    : "w-full text-left px-4 py-3 rounded-10px text-slate-300 hover:bg-violet-900/60 font-medium";
                 btnMob.innerHTML = `<i class="fa-regular fa-calendar mr-2"></i> ${item.label.toUpperCase()} 2026`;
                 btnMob.onclick = () => {
                     switchData(item.id);
