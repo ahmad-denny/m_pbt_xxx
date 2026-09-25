@@ -627,6 +627,7 @@
     <script>
         let rawData = [];
         let charts = {};
+        let loggedUser = null;
         let currentMode = 'ALL'; 
         let chartRanks = { pbt: 'ALL', asset: 'ALL', casa: 'ALL', fdr: 'ALL', fbi: 'ALL' };
         
@@ -652,6 +653,27 @@
             let cleaned = val.toString().replace(/,/g, '').replace(/%/g, '').trim();
             let parsed = parseFloat(cleaned);
             return isNaN(parsed) ? 0 : parsed;
+        }
+
+        // Menentukan nama cabang user (dari data login) yang cocok dengan daftar cabang pada data KPI
+        function resolveUserBranch(user, data) {
+            if (!user) return 'ALL';
+
+            const candidates = [user.cabang, user.lokasi, user.region].filter(Boolean);
+
+            for (let i = 0; i < candidates.length; i++) {
+                const val = candidates[i].toString().trim();
+                if (!val) continue;
+
+                const upper = val.toUpperCase();
+                // Lewati nilai yang memang menandakan akses region/semua cabang
+                if (upper === 'ALL' || upper === 'SUMATERA' || upper.indexOf('REGION') !== -1) continue;
+
+                const match = data.find(d => d.name.toUpperCase() === upper);
+                if (match) return match.name;
+            }
+
+            return 'ALL';
         }
 
         async function loadData(keepBranch = null) {
@@ -689,13 +711,20 @@
 
                 initFilter();
 
+                // Jika keepBranch tidak diberikan (mis. saat load pertama setelah login),
+                // gunakan cabang milik user yang sedang login sebagai default tampilan.
+                let branchToApply = keepBranch;
+                if (branchToApply === null) {
+                    branchToApply = resolveUserBranch(loggedUser, rawData);
+                }
+
                 let targetBranch = 'ALL';
-                if (keepBranch && keepBranch !== 'ALL') {
-                    const exists = rawData.some(d => d.name === keepBranch);
+                if (branchToApply && branchToApply !== 'ALL') {
+                    const exists = rawData.some(d => d.name === branchToApply);
                     if (exists) {
-                        targetBranch = keepBranch;
+                        targetBranch = branchToApply;
                     } else {
-                        console.warn(`Cabang ${keepBranch} tidak ditemukan di data ${currentPeriodId}`);
+                        console.warn(`Cabang ${branchToApply} tidak ditemukan di data ${currentPeriodId}`);
                         targetBranch = 'ALL'; 
                     }
                 }
@@ -719,6 +748,7 @@
 
         document.addEventListener('authReady', function (e) {
             var user = e.detail;
+            loggedUser = user;
             if (user) {
                 var displayName = user.nama || 'User';
                 
