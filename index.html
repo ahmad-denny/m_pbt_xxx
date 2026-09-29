@@ -1284,6 +1284,45 @@
                 `;
                 tbody.innerHTML += row;
             });
+
+            // --- BARIS TOTAL REGION SUMATERA (baris terakhir, sticky di bawah area scroll) ---
+            if (currentMode === 'ALL' && tableData.length > 0) {
+                const sum = (k) => tableData.reduce((a, b) => a + b[k], 0);
+                const avg = (k) => sum(k) / tableData.length;
+                const tPbt = sum('pbt'), tTgtPbt = sum('tgtPbt');
+                const gapPbt = tPbt - tTgtPbt;
+                const tAsset = sum('asset'), gapAsset = sum('gapAsset');
+                const casaPct = avg('casaPct').toFixed(1);
+                const tActCasa = sum('actCasa'), gapCasa = sum('gapCasa');
+                const cof = avg('cof').toFixed(2);
+                const tFunding = sum('actFunding'), tFinancing = sum('actFinancing');
+                const fdrPct = tFunding > 0 ? ((tFinancing / tFunding) * 100).toFixed(1) : '0.0';
+                const gapFinancing = sum('gapFinancing');
+                const tFbi = sum('fbi'), gapFbi = sum('gapFbi');
+                const ppap = avg('ppap').toFixed(2);
+
+                const c = 'p-2 sm:p-3 text-right font-bold sticky bottom-0 z-10 bg-violet-50 shadow-[0_-1px_0_0_#ddd6fe]';
+                const posNeg = (v) => v < 0 ? 'text-red-500' : 'text-green-600';
+                tbody.innerHTML += `
+                    <tr class="text-slate-800">
+                        <td class="p-2 sm:p-3 font-extrabold uppercase sticky left-0 bottom-0 z-20 bg-violet-50 text-violet-900 shadow-[0_-1px_0_0_#ddd6fe,2px_0_5px_-2px_rgba(0,0,0,0.1)]">Total Region Sumatera</td>
+                        <td class="${c} ${posNeg(tPbt)}">${fmt(tPbt)}</td>
+                        <td class="${c} ${posNeg(gapPbt)}">${fmt(gapPbt)}</td>
+                        <td class="${c}">${fmt(tAsset)}</td>
+                        <td class="${c} ${posNeg(gapAsset)}">${fmt(gapAsset)}</td>
+                        <td class="${c} ${casaPct < 60 ? 'text-red-500' : 'text-green-600'}">${casaPct}%</td>
+                        <td class="${c}">${fmt(tActCasa)}</td>
+                        <td class="${c} ${posNeg(gapCasa)}">${fmt(gapCasa)}</td>
+                        <td class="${c} ${cof > 2.30 ? 'text-red-600' : 'text-green-600'}">${cof}%</td>
+                        <td class="${c} ${fdrPct < 30 ? 'text-red-500' : 'text-green-600'}">${fdrPct}%</td>
+                        <td class="${c}">${fmt(tFinancing)}</td>
+                        <td class="${c} ${posNeg(gapFinancing)}">${fmt(gapFinancing)}</td>
+                        <td class="${c}">${fmt(tFbi)}</td>
+                        <td class="${c} ${posNeg(gapFbi)}">${fmt(gapFbi)}</td>
+                        <td class="${c.replace('text-right','text-center')}"><span class="${ppap > 1 ? 'bg-red-100 text-red-700' : 'bg-green-50 text-green-700'} px-1.5 py-0.5 rounded text-[10px] sm:text-[12px]">${ppap}%</span></td>
+                    </tr>
+                `;
+            }
         }
 
         const smartLabelsPlugin = {
