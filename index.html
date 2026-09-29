@@ -595,11 +595,11 @@
 				        <h3 class="text-xs sm:text-base font-bold text-slate-700">Detailed Data Breakdown</h3>
 				    </div>
 				
-				    <!-- Cukup 1 Pembungkus ini untuk Scroll Horizontal sekaligus Scroll Vertikal -->
-				    <div class="overflow-auto max-h-[400px]">
-				        <table class="w-full text-left border-collapse min-w-[1000px]">
-				            <!-- Header dibuat Sticky ke Atas -->
-				            <thead class="bg-white sticky top-0 z-20 shadow-[0_1px_0_0_rgba(0,0,0,0.1)]">
+				    <!-- Header tabel: di luar area scroll vertikal, scroll horizontal disinkronkan dengan body -->
+				    <div id="tableHeadWrap" class="overflow-x-hidden bg-white border-b border-gray-200" style="scrollbar-gutter: stable;">
+				        <table class="w-full text-left border-collapse" style="table-layout: fixed; min-width: 1425px;">
+				            <colgroup><col style="width:170px"><col style="width:85px"><col style="width:85px"><col style="width:95px"><col style="width:95px"><col style="width:75px"><col style="width:95px"><col style="width:95px"><col style="width:70px"><col style="width:70px"><col style="width:110px"><col style="width:110px"><col style="width:90px"><col style="width:90px"><col style="width:90px"></colgroup>
+				            <thead class="bg-white">
 				                <tr class="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">
 				                    <!-- Kolom Branch Name: Sticky Kiri (z-30) & Sticky Atas -->
 				                    <th class="p-2 sm:p-3 font-bold sticky left-0 top-0 bg-white z-30 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">Branch Name</th>
@@ -619,9 +619,14 @@
 				                    <th class="p-2 sm:p-3 font-bold text-center bg-white">PPAP/YTD</th>
 				                </tr>
 				            </thead>
+				        </table>
+				    </div>
+
+				    <!-- Body tabel: scrollbar vertikal hanya di area ini (di bawah header) -->
+				    <div id="tableBodyWrap" class="overflow-auto max-h-[350px]" style="scrollbar-gutter: stable;">
+				        <table class="w-full text-left border-collapse" style="table-layout: fixed; min-width: 1425px;">
+				            <colgroup><col style="width:170px"><col style="width:85px"><col style="width:85px"><col style="width:95px"><col style="width:95px"><col style="width:75px"><col style="width:95px"><col style="width:95px"><col style="width:70px"><col style="width:70px"><col style="width:110px"><col style="width:110px"><col style="width:90px"><col style="width:90px"><col style="width:90px"></colgroup>
 				            <tbody id="tableBody" class="text-[10px] sm:text-xs divide-y divide-gray-100">
-				                <!-- Pastikan saat render TD via JavaScript: -->
-				                <!-- TD pertama (Branch Name) diberi class: sticky left-0 bg-white z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] -->
 				            </tbody>
 				        </table>
 				    </div>
@@ -638,6 +643,15 @@
         let rawData = [];
         let charts = {};
         let loggedUser = null;
+
+        // Sinkronkan scroll horizontal header tabel dengan body tabel
+        (function () {
+            const head = document.getElementById('tableHeadWrap');
+            const body = document.getElementById('tableBodyWrap');
+            if (head && body) {
+                body.addEventListener('scroll', () => { head.scrollLeft = body.scrollLeft; }, { passive: true });
+            }
+        })();
         let currentMode = 'ALL'; 
         let chartRanks = { pbt: 'ALL', asset: 'ALL', casa: 'ALL', fdr: 'ALL', fbi: 'ALL' };
         
